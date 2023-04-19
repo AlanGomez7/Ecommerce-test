@@ -1,0 +1,91 @@
+<%- include("../partials/admin-header") %>
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Product</h2>     
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <form action="/admin/edit-product/<%=product._id%>" method="patch">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>1. General info</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product title</label>
+                                            <input type="text" placeholder="Type here" name="title" class="form-control" value="<%= product.title%>">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Description</label>
+                                            <textarea placeholder="Type here" class="form-control" name="description" rows="4" required><%= product.description%></textarea>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Brand name</label>
+                                            <input type="text" placeholder="Type here" name="brand" class="form-control" value="<%= product.brand%>">
+                                            
+                                        </div>
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>2. Pricing</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Cost in USD</label>
+                                            <input type="text" placeholder="Type here" name="price" class="form-control" value="$<%= product.price%>">
+                                        </div>
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>3. Category</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="col-md-9">
+                                            <div class="mb-4">
+
+                                                <%for(let i = 0; i < categories.length; i++){%>
+                                                    <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                                                        <input class="form-check-input" checked="" name="category" type="radio" required multiple value="<%= categories[i]._id%>">
+                                                        <span class="form-check-label"> <%=categories[i].category%> </span>
+                                                    </label>
+                                                <%}%>
+    
+                                            </div>
+                                        </div> <!-- col.// -->
+                                    </div> <!-- row.// -->
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>4. Media</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <img src="<%= product.image %>" style="height: auto; width: 75px;"><br>
+                                            <label class="form-label">Images</label>
+                                            <input class="form-control" type="file" name="Image" multiple>
+                                        </div>
+                                    </div> <!-- col.// -->
+                                </div> <!-- .row end// -->
+                            </div>
+                            <div>
+                                <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
+                                <button class="btn btn-md rounded font-sm hover-up " type="submit">Publish</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section> <!-- content-main end// -->
+<%- include("../partials/admin-footer")%>

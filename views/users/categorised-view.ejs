@@ -1,0 +1,79 @@
+
+<%- include('../partials/user-header')%>
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Shop</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+
+        <div class="row mb-5">
+          <div class="col-md-9 order-2">
+
+            <div class="row">
+              <div class="col-md-12 mb-5">
+                <div class="float-md-left mb-4"><h2 class="text-black h5">Shop All</h2></div>
+                <div class="d-flex">
+                  <div class="dropdown mr-1 ml-md-auto">
+                  </div>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">Sort By</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                    
+                      <a class="dropdown-item" href="#">Name, A to Z</a>
+                      <a class="dropdown-item" href="#">Name, Z to A</a>
+                      <a class="dropdown-item" href="#">Price low to high</a>
+                      <a class="dropdown-item" href="#">price High to low</a>
+
+                      <div class="dropdown-divider">Filters</div>
+                      <a class="dropdown-item" href="#"></a>
+                      <a class="dropdown-item" href="#"></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-5">
+
+              <%for(let i = 0; i < result.length; i++){%>
+                
+                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                  <div class="block-4 text-center border">
+                    <figure class="block-4-image"> 
+                      <a href="/product-details/<%= result[i]._id %>"><img loading="lazy" src= <%= result[i].image %> alt="Image placeholder" class="img-fluid w-100 h-75"></a>
+                    </figure>
+                    <div class="block-4-text p-4">
+                      <h3><a href="/product-details/<%= result[i]._id %>"><%= result[i].title %></a></h3>
+                      <p class="mb-0"><%= result[i].brand %></p>
+                      <p class="text-primary font-weight-bold">$<%= result[i].price %></p>
+                    </div>
+                    <p>
+                      <!-- <a href="/product-details" class="btn btn-sm btn-primary">Add to Wishlist</a> -->
+                    </p>
+                  </div>
+                </div>
+                
+              <%}%>
+
+            </div>
+          </div>
+
+          <div class="col-md-3 order-1 mb-5 mb-md-0">
+            <div class="border p-4 rounded mb-4">
+              <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
+              <ul class="list-unstyled mb-0">
+                <%for(let i = 0; i < category.length; i++){%>
+                  <li class="mb-1"><a href="/category/<%= category[i]._id%>" class="d-flex"><span><%=category[i].category%></span> <span class="text-black ml-auto">(<%=i%>)</span></a></li>
+                <%}%>
+                </ul>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+
+<%- include('../partials/user-footer') %>
