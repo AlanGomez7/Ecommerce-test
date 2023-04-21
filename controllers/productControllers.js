@@ -67,8 +67,4 @@ module.exports = {
       res.redirect('/admin/view-product');
     });
   },
-
-
-
-
 };

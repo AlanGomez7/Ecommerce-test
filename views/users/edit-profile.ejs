@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="card mb-4">
-                        <form action="/edit-profile/<%= currentUser._id %>" method="POST">
+                        <form action="/edit-profile/<%= currentUser._id %>" method="post">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -52,9 +52,9 @@
                                 </div> <!-- row.// -->
                                 <hr class="mb-4 mt-0">
                                  <!-- row.// -->
-                            <div class="d-flex justify-content-center">
+                              <div class="d-flex justify-content-center">
                                 <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
-                                <button class="btn btn-md rounded font-sm hover-up mb-5" type="submit">Update</button>
+                                <button class="btn btn-md rounded font-sm hover-up mb-5" type="submit" style="background-color: blueviolet;">Update</button>
                             </div>
                         </form>
                     </div>

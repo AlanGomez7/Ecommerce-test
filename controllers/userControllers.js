@@ -1,12 +1,11 @@
 const userHelpers = require("../helpers/userHelper");
 const createError = require("http-errors");
 const authSchema = require("../models/authmodel");
+const addressSchema = require("../models/addressModel")
 const jwt = require("jsonwebtoken");
 const resetPasswordAuth = require("../utils/twilio");
-const { response } = require("express");
-const productHelper = require("../helpers/productHelper");
 const maxAge = 3 * 24 * 60 * 60;
-
+let cartCount = 0;
 const createToken = (id) => {
   return jwt.sign({ id }, "This is a very secret string", {
     expiresIn: maxAge,
@@ -77,9 +76,10 @@ module.exports = {
       if (!user.isAllowed) {
         throw createError.Forbidden("user is denied access");
       } else {
+        console.log(value, "================================")
         let response = await userHelpers.doLogin(value);
         if (response.status) {
-          // createToken(user._id)
+          console.log(response.user, "================================]")
           req.session.userLoggedIn = true;
           req.session.user = response.user;
           res.redirect("/");
@@ -133,9 +133,30 @@ module.exports = {
     else res.redirect("/");
   },
 
-  addAddress: (req, res) => {
-    res.render("users/add-address",{user: req.session.user, cartCount: req.session.cartCount});
+  addAddress: async (req, res) => {
+    let user = req.session.user;
+    if(user) {
+      userHelpers.getUser(user).then((currentUser) => {
+        res.render('users/add-address',{ currentUser, cartCount, user: req.session.user});
+        // res.render('users/edit-profile', );
+      });
+
+    }else{
+      res.redirect('/login');
+    }
+  },
+
+  storeAddress: async (req, res) => {
+    try {
+      console.log(req.body)
+      var {error, value} = await addressSchema.addressSchema.validate(req.body);
+      if(error) throw createError.BadRequest('INPUT NOT VALID')
+      userHelpers.addAddress(value, req.params.id).then((response) => {
+        res.send(response)
+      })
+    } catch (error) {
+      res.send(error) 
+    }
   }
-
-
 };
+ 

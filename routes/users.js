@@ -28,7 +28,7 @@ router.route("/shop").get(pageController.shoppingPage);
 
 router.get("/edit-profile", pageController.profileEditing);
 
-router.patch("/edit-profile/:id", pageController.post_profileEditing);
+router.post("/edit-profile/:id", pageController.post_profileEditing);
 
 router.route("/cart").get(cartControllers.cart);
 
@@ -64,6 +64,9 @@ router.get("/checkout",middleware.verifyLoggin, cartControllers.checkout_get);
 router.post("/checkout", cartControllers.checkout_post);
 
 router.delete("/delete-cart-item", cartControllers.deleteCartItem);
+
 router.get('/add-address', userController.addAddress)
+router.put('/add-address/:id', userController.storeAddress)
+
 
 module.exports = router;

@@ -280,3 +280,18 @@ const grantAccess = () => {
   keyhole.removeEventListener("mouseover", grantAccess);
 };
 
+function addToCart(id) {
+	let count = document.getElementById('cart-count').innerText;
+	let url = '/add-to-cart/' + id;
+	fetch(url, {
+	  method: 'GET'
+	}).then((res)=>{
+	  if(res.status === 200) {
+		// console.log(count, "|||||||||||||||||||||||||||||")
+	  let count = document.getElementById('cart-count').innerText;
+		let numericalCount = +count + 1
+		document.getElementById('cart-count').innerText = numericalCount 
+		
+	  }
+	})
+}

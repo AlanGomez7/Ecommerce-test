@@ -14,19 +14,18 @@ module.exports = {
       cartCount = await userHelpers.getCartCount(req.session.user._id);
       console.log(cartCount);
     }
-    productHelpers.getProducts().then((products) => {
+    let products=await productHelpers.getProducts()
+    console.log(products);
       adminHelper.getCategories().then((category) => {
         res.render('users/landing-page', { user, product: products, cartCount, category });
       });
-    });
-
   },
 
   // Profile Editing function.
    profileEditing: async(req, res) => {
     let user = req.session.user;
     if(user) {
-    let categories = await adminHelper.getCategories()
+    
       userHelpers.getUser(user).then((currentUser) => {
         
   
@@ -39,7 +38,7 @@ module.exports = {
   },
 
   post_profileEditing: (req, res) => {
-    
+    // console.log(req.body, ":::::::::::::::::::::::::::::::::::::::")
     userHelpers.updateUser(req.params.id, req.body).then(() => {
       req.session.user = req.body;
       res.redirect('/edit-profile');

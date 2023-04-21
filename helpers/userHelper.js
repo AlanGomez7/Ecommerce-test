@@ -3,7 +3,7 @@ var collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
-const { date } = require('joi');
+const { date, object } = require('joi');
 
 
 
@@ -20,6 +20,7 @@ module.exports = {
         })
     }, 
      doLogin:(userData)=>{
+        console.log(userData,">>>>>>>")
         return new  Promise(async(resolve, reject)=>{
             let loginStatus = false;
             let response = {};
@@ -64,7 +65,7 @@ module.exports = {
     },
 
     getUserByMobile: (mobile)=>{
-        console.log(typeof mobile)
+         
         return new Promise(async(resolve, reject)=>{
             var user = await db.get().collection(collection.USER_COLLECTION).findOne({mobile: mobile})
             resolve (user)
@@ -80,7 +81,6 @@ module.exports = {
                     username:userDetails.username,
                     email:userDetails.email,
                     firstname: userDetails.firstname,
-                    password: userDetails.password,
                     lastname: userDetails.lastname,
                     mobile:userDetails.mobile,
                 },
@@ -93,7 +93,6 @@ module.exports = {
     },
 
     updatePassword:(userId,password)=>{
-        console.log(userId, password, "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
         return new Promise(async(resolve,reject)=>{
            let passwordBcrypt = await bcrypt.hash(password, 10)
             console.log(passwordBcrypt)
@@ -208,6 +207,28 @@ module.exports = {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({user: ObjectId(order)})
             // console.log(cart)
             resolve(cart.products)
+        })
+    },
+
+    addAddress : (address, user)=>{
+        console.log(address, user)
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id: ObjectId(user)},{
+                $push:{
+                    address 
+                },
+            }, {
+                upsert: true
+            }).then((response)=>{
+                resolve(response);
+            })
+        })
+    },
+
+    getAddress: (userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let address = await db.get().collection(collection.USER_COLLECTION).findOne({_id: ObjectId(userId)})
+            resolve(address.address)
         })
     }
 };

@@ -7,6 +7,7 @@ const db = require("./config/connection");
 const adminRouter = require("./routes/admin");
 const usersRouter = require("./routes/users");
 const session = require("express-session");
+const nocache = require("nocache");
 
 require("dotenv").config()
 
@@ -24,7 +25,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-
+// app.use(nocache)
 app.use(
   session({
     secret: "key",

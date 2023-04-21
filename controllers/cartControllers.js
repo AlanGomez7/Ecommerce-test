@@ -1,43 +1,46 @@
 const userHelpers = require("../helpers/userHelper");
 const addressSchema = require("../models/addressModel");
+const productHelpers = require('../helpers/productHelper');
+var cartCount = 0
 
 module.exports = {
 
   checkout_get: async (req, res) => {
     let total = await userHelpers.getTotalAmount(req.session.user._id);
-    res.render("users/checkout", { user: req.session.user, total });
+    var address = await userHelpers.getAddress(req.session.user._id);
+    console.log(address)
+    res.render("users/checkout", { user: req.session.user, total, address});
   },
 
-  addToCart: (req, res) => {
-    
+  addToCart: async(req, res) => {
     if(req.session.user) {
+
       productHelpers.addToCart(req.params.id, req.session.user._id).then(() => {     
         res.json({status: true});
       });
-
     }else{
       res.json({status: false});
     }
   },
 
   checkout_post: async (req, res) => {
+
     try {
       req.body.paymentmethod = "COD";
-      console.log(req.body);
       let { error, value } = await addressSchema.addressSchema.validate(
         req.body
       );
       if (error) throw error;
       var cartProducts = await userHelpers.getCartProductList(req.body.userId);
       var total = await userHelpers.getTotalAmount(req.body.userId);
+      
       userHelpers.placeOrder(req.body, cartProducts, total).then((response) => {
         res.render("users/order-confirmed");
       });
-
-      console.log(req.body, total, cartProducts);
     } catch (err) {
       res.send(err);
     }
+    
   },
 
   changeProductQuantity: (req, res) => {
