@@ -68,24 +68,7 @@ module.exports = {
     });
   },
 
-  addToCart: (req, res) => {
-    
-    if(req.session.user) {
-      productHelpers.addToCart(req.params.id, req.session.user._id).then(() => {     
-        res.json({status: true});
-      });
 
-    }else{
-      res.json({status: false});
-    }
-  },
 
-  changeProductQuantity: (req, res) => {
-    userHelper.changeProductQuantity(req.body).then(async(response)=>{
-    response.total = await userHelper.getTotalAmount(req.body.userId)
-    // console.log(response, "?????????????????????????????????????????????????")
-     res.json(response)
-    })
-  }
 
 };

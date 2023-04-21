@@ -1,24 +1,22 @@
-const userHelpers = require('../helpers/userHelper');
-const createError = require('http-errors');
-const authSchema = require('../models/authmodel');
-const addressSchema = require('../models/addressModel');
-
-const jwt = require('jsonwebtoken');
-const resetPasswordAuth = require('../utils/twilio');
-const { response } = require('express');
+const userHelpers = require("../helpers/userHelper");
+const createError = require("http-errors");
+const authSchema = require("../models/authmodel");
+const jwt = require("jsonwebtoken");
+const resetPasswordAuth = require("../utils/twilio");
+const { response } = require("express");
+const productHelper = require("../helpers/productHelper");
 const maxAge = 3 * 24 * 60 * 60;
 
 const createToken = (id) => {
-  return jwt.sign({ id }, 'This is a very secret string', {
+  return jwt.sign({ id }, "This is a very secret string", {
     expiresIn: maxAge,
   });
 };
 
 module.exports = {
   signupFunction: (req, res) => {
-    res.render('users/signup', { signupErr: req.session.signupErr });
+    res.render("users/signup", { signupErr: req.session.signupErr });
   },
-  //need to add the message for user side to know wheather its logged or not.
 
   postSignupFunction: async (req, res) => {
     try {
@@ -35,13 +33,13 @@ module.exports = {
               console.log(req.session.user);
               req.session.loggedIn = true;
               req.session.user = response;
-              res.redirect('/');
+              res.redirect("/");
             } else {
-              res.redirect('/login');
+              res.redirect("/login");
             }
           });
       } else {
-        throw createError.BadRequest('Already a user');
+        throw createError.BadRequest("Already a user");
       }
     } catch (error) {
       res.send({
@@ -55,64 +53,68 @@ module.exports = {
   loginFunction: (req, res) => {
     if (req.session.user) {
       console.log(req.session.user);
-      res.redirect('/');
+      res.redirect("/");
     } else {
-      req.session.loginErr = '';
-      res.render('users/login', { userErr: req.session.loginErr });
+      req.session.loginErr = "";
+      res.render("users/login", { userErr: req.session.loginErr });
     }
   },
 
   postLoginFunction: async (req, res, next) => {
     try {
-
-      console.log(req.body, "=================================================")
-      var { error, value } = await authSchema.LoginAuthSchema.validate(req.body);
-      if (error) throw createError.BadRequest('Invalid Credentials.');
+      console.log(
+        req.body,
+        "================================================="
+      );
+      var { error, value } = await authSchema.LoginAuthSchema.validate(
+        req.body
+      );
+      if (error) throw createError.BadRequest("Invalid Credentials.");
 
       let user = await userHelpers.getUser(value);
-      if (!user) throw createError.BadRequest('user not registered.');
+      if (!user) throw createError.BadRequest("user not registered.");
 
       if (!user.isAllowed) {
-        throw createError.Forbidden('user is denied access');
+        throw createError.Forbidden("user is denied access");
       } else {
         let response = await userHelpers.doLogin(value);
         if (response.status) {
           // createToken(user._id)
           req.session.userLoggedIn = true;
           req.session.user = response.user;
-          res.redirect('/');
+          res.redirect("/");
         } else {
-          throw createError.BadRequest('Invalid Credentials.');
+          throw createError.BadRequest("Invalid Credentials.");
         }
       }
-    } catch (error){
+    } catch (error) {
       console.log(error);
       req.session.loginErr = error;
-      res.render('users/login', { userErr: req.session.loginErr });
+      res.render("users/login", { userErr: req.session.loginErr });
     }
   },
 
   logout: (req, res) => {
     req.session.destroy();
-    res.redirect('/');
+    res.redirect("/");
   },
 
   otpLogin: (req, res) => {
-    res.render('users/reset-password', { otpLogin: true });
+    res.render("users/reset-password", { otpLogin: true });
   },
 
   otpLogin_post: async (req, res) => {
     try {
       let user = await userHelpers.getUserByMobile(req.body.mobile);
       if (!user || !user.isAllowed)
-        throw createError.NotFound('user not found');
+        throw createError.NotFound("user not found");
       req.session.mobile = user.mobile;
       resetPasswordAuth.sendOtp(req.session.mobile);
-      res.render('users/enter-otp', { otpLogin: true });
+      res.render("users/enter-otp", { otpLogin: true });
     } catch (error) {
       res.send({
         error: {
-          status: 'error.status',
+          status: "error.status",
           message: error.message,
         },
       });
@@ -127,37 +129,13 @@ module.exports = {
       req.session.mobile,
       req.body.otp
     );
-    if (!result) throw createHttpError.BadRequest('Wrong otp');
-    else res.redirect('/');
+    if (!result) throw createHttpError.BadRequest("Wrong otp");
+    else res.redirect("/");
   },
 
-  checkout_get: async(req, res) => {
-    let total = await userHelpers.getTotalAmount(req.session.user._id);
-    res.render('users/checkout', {user: req.session.user, total});
-  },
-  
-  checkout_post: async(req, res) => {
-    try{
-      req.body.paymentmethod = "COD"
-      console.log(req.body)
-      let {error, value} = await addressSchema.addressSchema.validate(req.body)
-      if (error) throw error;
-      var cartProducts = await userHelpers.getCartProductList(req.body.userId);
-      var total = await userHelpers.getTotalAmount(req.body.userId);
-      userHelpers.placeOrder(req.body, cartProducts, total).then((response)=>{
-        res.send('order placed successfully');
-      })
-      console.log(req.body, total, cartProducts);
-    }catch(err){
-      res.send(err)
-    }
-  },
-
-  deleteCartItem: async (req, res) => {
-    console.log(req.body,"ooooooooooooooooooooooooooooo")
-    userHelpers.deleteCartProduct(req.body).then((response) => {
-      res.send(response);
-    })
+  addAddress: (req, res) => {
+    res.render("users/add-address",{user: req.session.user, cartCount: req.session.cartCount});
   }
-  
+
+
 };

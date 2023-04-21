@@ -14,13 +14,9 @@ module.exports = {
       cartCount = await userHelpers.getCartCount(req.session.user._id);
       console.log(cartCount);
     }
-
     productHelpers.getProducts().then((products) => {
-      // console.log(products)
       adminHelper.getCategories().then((category) => {
-
         res.render('users/landing-page', { user, product: products, cartCount, category });
-
       });
     });
 
@@ -60,21 +56,6 @@ module.exports = {
   },
 
   // Cart function.
-  cart: async (req, res) => {
-    if (req.session.userLoggedIn) {
-      console.log(req.session.userLoggedIn)
-      let products = await productHelpers.getCartProducts(req.session.user._id);
-      if(products.length == 0) {
-        res.render('users/emptycart')
-      }else{
-        let total = await userHelpers.getTotalAmount(req.session.user._id);
-        res.render('users/cart', { products, user: req.session.user, cartCount, total });
-      }
-
-    } else {
-      res.redirect('/login');
-    }
-  },
 
   applyCategory: (req, res) => {
     adminHelper.getCategories().then((category) => {
@@ -109,9 +90,6 @@ module.exports = {
     if(!result) throw createHttpError.BadRequest('Wrong otp');
     else res.render('users/new-password');
   },
-
-
-
 
 // here the problem is that as iam using session.user to store user details my login is automatically done you have to fix this asap!
 

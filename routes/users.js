@@ -4,6 +4,8 @@ const userController = require("../controllers/userControllers");
 const pageController = require("../controllers/pageControllers");
 const productController = require("../controllers/productControllers");
 const middleware = require("../middleware/loginmiddleware");
+const cartControllers = require("../controllers/cartControllers");
+
 
 // login route for user
 router
@@ -28,13 +30,13 @@ router.get("/edit-profile", pageController.profileEditing);
 
 router.patch("/edit-profile/:id", pageController.post_profileEditing);
 
-router.route("/cart").get(pageController.cart);
+router.route("/cart").get(cartControllers.cart);
 
 router.route("/product-details/:id").get(productController.productDetails);
 
-router.route("/add-to-cart/:id").get(productController.addToCart);
+router.route("/add-to-cart/:id").get(cartControllers.addToCart);
 
-router.route("/get-cart-products").get(pageController.cart);
+router.route("/get-cart-products").get(cartControllers.cart);
 
 router.route("/category/:id").get(pageController.applyCategory);
 
@@ -50,7 +52,7 @@ router.route("/submit-otp-login").post(userController.submitOtpLogin);
 
 router.post(
   "/change-product-quantity",
-  productController.changeProductQuantity
+  cartControllers.changeProductQuantity
 );
 
 router.get("/otp-login", userController.otpLogin);
@@ -58,9 +60,10 @@ router.post("/otp-login", userController.otpLogin_post);
 
 router.route("/update-password").post(pageController.updatePassword_post);
 
-router.get("/checkout",middleware.verifyLoggin, userController.checkout_get);
-router.post("/checkout", userController.checkout_post);
+router.get("/checkout",middleware.verifyLoggin, cartControllers.checkout_get);
+router.post("/checkout", cartControllers.checkout_post);
 
-router.delete("/delete-cart-item", userController.deleteCartItem);
+router.delete("/delete-cart-item", cartControllers.deleteCartItem);
+router.get('/add-address', userController.addAddress)
 
 module.exports = router;

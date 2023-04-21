@@ -177,7 +177,7 @@ module.exports = {
     },
     placeOrder: (order, products, total)=>{
         return new Promise((resolve, reject)=>{
-            let status = order['payment-method'] === 'COD' ? 'placed': 'pending';
+            // let status = order['payment-method'] === 'COD' ? 'placed': 'pending';
             let orderObj={
                 deliveryDetails: {
                     address: order.address,
@@ -191,9 +191,9 @@ module.exports = {
                 fname: order.fname,
                 lname: order.lname,
                 total: total,
-                paymentMethod: order['payment-method'],
+                paymentMethod: "COD",
                 products: products,
-                status: status,
+                status: "Pending",
                 date: Date.now()
                 
             }
