@@ -171,28 +171,28 @@ module.exports = {
                
               ])
               .toArray();
-            resolve(total[0].total);
+            resolve(total);
         });
     },
-    placeOrder: (order, products, total)=>{
+    placeOrder: (order, products, total, user)=>{
+        console.log(order.userId)
         return new Promise((resolve, reject)=>{
-            // let status = order['payment-method'] === 'COD' ? 'placed': 'pending';
+            let status = user.paymentmethod === 'COD' ? 'placed': 'pending';
             let orderObj={
                 deliveryDetails: {
+                    username: order.username,
                     address: order.address,
-                    buildingName: order.buildingname,
-                    postalCode: order['postal-code'],
+                    postalCode: order.pincode,
                     state: order.state,
-                    email: order.emailaddress,
-                    mobile: order.phone
+                    district: order.district,
+                    mobile: order.mobile,
+                    altMobile: order.alternatemobile
                 },
-                userId: ObjectId(order.userId),
-                fname: order.fname,
-                lname: order.lname,
-                total: total,
-                paymentMethod: "COD",
+                userId: ObjectId(user.userId),
                 products: products,
-                status: "Pending",
+                paymentMethod: user.paymentmethod ,
+                status: status,
+                total: total,
                 date: Date.now()
                 
             }
@@ -200,6 +200,16 @@ module.exports = {
                 resolve()
             })
         })
+    },
+
+    decreaseStock: (id)=>{
+        return new Promise(async(resolve, reject) => {
+            let result = await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id: ObjectId(id)}, {
+                $inc: {stock: -1}
+            })
+            resolve(result)
+        })
+
     },
 
     getCartProductList: (order)=>{
@@ -230,6 +240,24 @@ module.exports = {
             let address = await db.get().collection(collection.USER_COLLECTION).findOne({_id: ObjectId(userId)})
             resolve(address.address)
         })
-    }
+    },
+    updateCartProductList: (order)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart = await db.get().collection(collection.CART_COLLECTION).updateOne({user: ObjectId(order)},{
+                $set:{
+                    brought: true
+                }
+            })
+            // console.log(cart)
+            resolve(cart)
+        })
+    },    
+    deleteCart: (userId) => {
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.CART_COLLECTION).deleteOne({user: ObjectId(userId)}).then((response)=>{
+                resolve(response)
+            });
+        })
+    },
 };
 

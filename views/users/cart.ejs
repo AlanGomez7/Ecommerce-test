@@ -28,11 +28,15 @@
                   <tr>
                     <td class="product-thumbnail">
                       <img src="<%=products.product.image %>" alt="Image" class="img-fluid">
+                      <%if(products.product.stock == 0){%>
+                        <p class="mb-0 text-danger h5">Out of stock</p>
+                      <%}%>
                     </td>
                     <td class="product-name">
                       <h2 class="h5 text-black"><%=products.product.title%></h2>
                     </td>
-                    <td><%=products.product.price %></td>
+                    <td>$<%=products.product.price %>                     
+                    </td>
                     <td>
                       <div class="input-group mb-3" style="max-width: 120px;">
                         <div class="input-group-prepend">
@@ -44,7 +48,7 @@
                         </div>
                       </div>
                     </td>
-                    <td><%=products.product.price %></td>
+                    <td>$<%=products.product.price %></td>
                     <td>
                       <button class="btn btn-primary btn-sm text-light" id="delete-cart" type="button"onclick="deleteCartItem('<%= products._id%>', '<%= products.product._id%>')">x</button>
                     </td>

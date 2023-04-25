@@ -68,5 +68,8 @@ router.delete("/delete-cart-item", cartControllers.deleteCartItem);
 router.get('/add-address', userController.addAddress)
 router.put('/add-address/:id', userController.storeAddress)
 
+router.get('/confirm', (req, res) => {
+  res.render('users/order-confirmed')
+})
 
 module.exports = router;

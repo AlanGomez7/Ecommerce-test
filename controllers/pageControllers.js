@@ -82,7 +82,7 @@ module.exports = {
   },
 
   submitOtp: async(req, res) => {
-    console.log(req.session.mobile);
+    console.log(req.session.mobile, "mobile number is:");
     let user = await userHelpers.getUserByMobile(req.session.mobile)
     // req.session.user = user
     let result = await resetPasswordAuth.verifyOtp(req.session.mobile, req.body.otp)

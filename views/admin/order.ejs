@@ -54,7 +54,7 @@
                                 <%orders.forEach((order)=>{%>
                                     <tr>
                                         <td><%= order._id%></td>
-                                        <td><b><%= order.fname + order.lname%></b></td>
+                                        <td><b><%= order.deliveryDetails.username%></b></td>
                                         
                                         <td>$<%= order.total%></td>
                                         <td><span class="badge rounded-pill alert-warning"><%=order.status %></span></td>

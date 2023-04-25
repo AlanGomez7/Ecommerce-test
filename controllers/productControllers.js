@@ -1,4 +1,3 @@
-const { default: axios } = require('axios');
 const adminHelper = require('../helpers/adminHelper');
 const productHelpers = require('../helpers/productHelper');
 const userHelper = require('../helpers/userHelper');
@@ -32,25 +31,24 @@ module.exports = {
 
   AddProductFunc: (req, res) => {
     adminHelper.getCategories().then((categories) => {
-      console.log(categories);
       res.render('admin/add-product', { categories });
     });
   },
 
   postAddProduct: async (req, res) => {
-    req.body.price = +req.body.price
+
     try {
+      req.body.stock = +req.body.stock;
+      req.body.price = +req.body.price;
       console.log(req.file);
       const imgUrl = [];
+      
       for (let i = 0; i < req.files.length; i++) {
         const result = await cloudinary.uploader.upload(req.files[i].path);
         imgUrl.push(result.url);
-        // console.log(result.url);
       }
       productHelpers.addProducts(req.body, async (id) => {
-        // console.log(id)
         productHelpers.addProductImages(id, imgUrl).then((response) => {
-          // console.log(response);
         });
       });
     } catch (err) {

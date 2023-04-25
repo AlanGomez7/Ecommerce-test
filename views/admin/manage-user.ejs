@@ -60,13 +60,13 @@
                                         <!-- onclick="confirmBlock(user._id)" -->
                                        <% if(user.isAllowed){ %>
 
-                                        <button  type="button" class="btn btn-sm font-sm btn-danger rounded" id="block-user" onclick="blockUser('<%=user._id%>')">
+                                        <button  type="button" class="btn btn-sm font-sm btn-danger rounded" id="<%=user._id%>" onclick="blockUser('<%=user._id%>')">
                                             <i class="material-icons md-edit"></i> Block
                                         </button>
                                             
                                         <%}else if(!user.isAllowed){%>
 
-                                            <button  type="button" class="btn btn-sm font-sm btn-light rounded" id="unblock-user" onclick="unblockUser('<%=user._id%>')">
+                                            <button  type="button" class="btn btn-sm font-sm btn-light rounded" id="<%=user._id%>" onclick="unblockUser('<%=user._id%>')">
                                                 <i class="material-icons md-edit"></i> Unblock
                                             </button>
                                             
@@ -104,7 +104,7 @@
     
     <script>
         function blockUser(userId){
-            document.getElementById('block-user').addEventListener("click", popup)
+            document.getElementById(userId).addEventListener("click", popup)
             function popup(){
             Swal.fire({
             title: 'Are you sure?',
@@ -139,7 +139,7 @@
         }
 
         function unblockUser(userId){
-            document.getElementById('unblock-user').addEventListener("click", popup)
+            document.getElementById(userId).addEventListener("click", popup)
             function popup(){
             Swal.fire({
             title: 'Are you sure?',

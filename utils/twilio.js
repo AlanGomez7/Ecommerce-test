@@ -1,11 +1,12 @@
-const authToken = "9f3664de8c95d6de563ccc971b1734aa";
-const accountSid= "ACa6a40fcfec29d6c7d08fb0e5af9e463f";
-const verifySid = "VA969247167a9ac06fc06b04146f637e11";
+const authToken = "2acfd3dfd76aea7548d57359592a8688";
+const accountSid= "AC4dbc5ee09c1902c8d09ad3cf24fd2765";
+const verifySid = "VA78b8b449952ff5208bf0bf5c400beea3";
 
 const client = require('twilio')(accountSid, authToken);
 module.exports = {
     
     sendOtp(mobileNo) {
+        console.log(mobileNo, "||||||||||||||||||")
         client.verify.v2.services(verifySid)
             .verifications
             .create({ to: '+91' + mobileNo, channel: 'sms' })

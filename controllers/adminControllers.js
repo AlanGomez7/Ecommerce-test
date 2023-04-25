@@ -45,7 +45,7 @@ module.exports = {
 
     viewProducts : (req, res) =>{
       productHelpers.getAllProducts().then((products)=>{
-        // let msg = ''
+        console.log(products, "|||||||||||||||||||||||")
         res.render('admin/view-product', {products});
       })
           
@@ -94,11 +94,10 @@ module.exports = {
     },
 
     orderDetails: async(req, res) => {
-        console.log(req.params.id)
-        let orderDetails = await adminHelpers.getOrderDetails(req.params.id)
-        let products = await adminHelpers.getOrderProducts(req.params.id)
+      let orderDetails = await adminHelpers.getOrderDetails(req.params.id)
+      let products = await adminHelpers.getOrderProducts(req.params.id)
         console.log(orderDetails)
-        res.render('admin/order-details', {products, orderDetails}) 
+        res.render('admin/order-details', {products, orderDetails, orderId: products[0]._id}) 
     },
 
     cancelOrder: async(req, res) => {

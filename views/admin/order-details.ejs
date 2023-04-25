@@ -41,7 +41,7 @@
                                 <div class="text">
                                     <h6 class="mb-1">Customer</h6>
                                     <p class="mb-1">
-                                        John Alexander <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template> <br> +998 99 22123456
+                                        <%=orderDetails[0].deliveryDetails.username%> <br>  <br> +91 <%=orderDetails[0].deliveryDetails.altMobile%>
                                     </p>
                                     <a href="#">View profile</a>
                                 </div>
@@ -55,7 +55,7 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method: card <br> Status: new
+                                        Shipping: Fargo express <br> Pay method: <%=orderDetails[0].paymentMethod%> <br> Status: <%=orderDetails[0].status%>
                                     </p>
                                     <a href="#">Download info</a>
                                 </div>
@@ -69,7 +69,7 @@
                                 <div class="text">
                                     <h6 class="mb-1">Deliver to</h6>
                                     <p class="mb-1">
-                                        City: Tashkent, Uzbekistan <br>Block A, House 123, Floor 2 <br> Po Box 10000
+                                        City: <%=orderDetails[0].deliveryDetails.district%>, <%=orderDetails[0].deliveryDetails.state%> <br><%=orderDetails[0].deliveryDetails.address%> <br> Po Box: <%=orderDetails[0].deliveryDetails.postalCode%>
                                     </p>
                                     <a href="#">View profile</a>
                                 </div>
@@ -86,7 +86,6 @@
                                             <th width="20%">Unit Price</th>
                                             <th width="20%">Quantity</th>
                                             <th width="20%" >Total</th>
-                                            
                                             <th width="20%" >Status</th>
                                             <th width="10%" class="text-end">Action</th>
                                         </tr>
@@ -114,6 +113,7 @@
                                             </tr>
                                         <%})%>
                                     </tbody>
+                                    
                                 </table>
                             </div> <!-- table-responsive// -->
                         </div> <!-- col// -->

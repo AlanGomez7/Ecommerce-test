@@ -41,6 +41,9 @@
                         <div class="col-lg-1 col-sm-2 col-4 col-date pr-5">
                             <h6>Price</h6>
                         </div>
+                        <div class="col-lg-1 col-sm-2 col-4 col-date pr-5">
+                            <h6>In Stock</h6>
+                        </div>
                         <div class="col-lg-2 col-sm-2 col-4 col-action text-end text-center">
                             <h6>Action</h6>
                         </div>
@@ -75,6 +78,9 @@
                                
                                 <div class="col-lg-1 col-sm-2 col-4 col-date">
                                     <span>$<%= products[i].price%></span>
+                                </div>
+                                <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                    <span><%= products[i].stock%></span>
                                 </div>
                                 <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
                                     <a href="/admin/edit-product/<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">

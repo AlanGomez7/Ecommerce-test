@@ -18,7 +18,10 @@
             <h2 class='text-black'><%= product.title %></h2>
             <p><%= product.brand %></p>
             <p><%= product.description %></p>
-            <p><strong class='text-primary h4'>$<%=product.price %></strong></p>
+            <p><strong class='text-primary h4'>$<%=product.price %></strong>
+            <%if(product.stock <= 50){%>
+              <p class="mb-0 text-danger h5">Only Few left!</p>
+            <%}%></p>
             <div class='mb-1 d-flex'>
               <label for='option-sm' class='d-flex mr-3 mb-3'>
                 <span class='d-inline-block mr-2' style='top:-2px; position: relative;'><input type='radio' id='option-sm' name='shop-sizes'></span> <span class='d-inline-block text-black'>Small</span>

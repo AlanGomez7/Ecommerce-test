@@ -8,6 +8,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
   addProducts: (product, callback) => {
+    product.isListed = true;
     db.get()
       .collection(collection.PRODUCT_COLLECTION)
       .insertOne(product)
@@ -175,8 +176,6 @@ module.exports = {
         let proExsit = userCart.products.findIndex(
           (product) => product.item == proId
         );
-        console.log(proExsit);
-
         if (proExsit != -1) {
           db.get()
             .collection(collection.CART_COLLECTION)
@@ -207,6 +206,7 @@ module.exports = {
       } else {
         let cartObj = {
           user: ObjectId(userId),
+          brought: false,
           products: [proObj],
         };
         db.get()

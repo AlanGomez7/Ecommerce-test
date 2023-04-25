@@ -19,19 +19,16 @@
           <form id="checkout-form" action="/checkout" method="post">
             <div class="p-3 p-lg-5 border">
 
-              <%address.forEach((address)=>{%>
+              <%for(let i=0; i < address.length; i++){%>
                 <div class="card mb-3">
-                  <h5 class="card-header text-dark"><%=address.username%></h5>
+                  <h5 class="card-header text-dark"><input type="radio" name="selectedaddress" value="<%=i%>">  <%=address[i].username%></h5>
                   <div class="card-body text-dark">
-                    <h5 class="card-title text-dark"><%=address.mobile%></h5>
-                    <p class="card-text text-dark"><%=address.address%>, <%=address.district%>, <%=address.state%>.</p>
-                    <p class="card-text text-dark"><%=address.pincode%>.</p>
-
-                    <a href="#" class="btn btn-warning text-light">Deliver Here</a>
-                    
+                    <h5 class="card-title text-dark"><%=address[i].mobile%></h5>
+                    <p class="card-text text-dark"><%=address[i].address%>, <%=address[i].district%>, <%=address[i].state%>.</p>
+                    <p class="card-text text-dark"><%=address[i].pincode%>.</p>                    
                   </div>
                 </div>
-              <%})%>
+              <%}%>
 
 
 
@@ -39,14 +36,12 @@
               <div class="form-group row mb-5">
                 <input type="text" class="form-control" id="c_phone" name="userId" placeholder="" value="<%=user._id%>"
                   hidden>
-                <input type="text" class="" id="c_phone" name="paymentmethod" placeholder="" value="COD" hidden>
               </div>
+              
 
               <div class="form-group">
                 <button class="btn btn-primary btn-sm py-3 btn-block" type="submit">&plus; Add new Address.</button>
-              </div>
-
-
+              </div> 
             </div>
         </div>
         <div class="col-md-6">
@@ -67,6 +62,25 @@
 
               </div>
             </div>
+          </div>
+
+          <div class="border p-3 mb-3">
+            <h3 class="h6 mb-0"><a class="d-block" 
+               role="button" aria-expanded="false" aria-controls="collapsebank">
+               <input type="radio" name="paymentmethod" value="razorPay" class="mr-3">   Razor Pay</a></h3>
+          </div>
+
+          <div class="border p-3 mb-3">
+            <h3 class="h6 mb-0"><a class="d-block" role="button">
+              <input type="radio" name="paymentmethod" value="COD" class="mr-3">   Cash On Delivery</a></h3>
+          </div>
+
+          <div class="border p-3 mb-5">
+            <h3 class="h6 mb-0"><a class="d-block"
+              role="button" aria-expanded="false" aria-controls="collapsepaypal">
+              <input type="radio" name="paymentmethod" value="paypal" class="mr-3">   Paypal</a></h3>
+
+            
           </div>
 
           <div class="row mb-5">
