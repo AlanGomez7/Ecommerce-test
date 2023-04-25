@@ -11,7 +11,7 @@ module.exports = {
       let total = await userHelpers.getTotalAmount(req.session.user._id);
       if(total.length === 0)throw createHttpError.NotFound('Cart is empty')
       var address = await userHelpers.getAddress(req.session.user._id);
-      res.render("users/checkout", { user: req.session.user, total: total[0].total, address});
+      res.render("users/checkout", { user: req.session.user, total: total[0].total, address, cartCount});
     }catch(err){
       res.send(err)
     }
@@ -34,14 +34,14 @@ module.exports = {
       if(cartProducts.length > 0){
         var address = await userHelpers.getAddress(req.body.userId)
         var total = await userHelpers.getTotalAmount(req.body.userId);
-
-        console.log(cartProducts, "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-
         userHelpers.placeOrder(address[req.body.selectedaddress], cartProducts, total[0].total, req.body).then((response) => {
-          userHelpers.deleteCart(req.body.userId).then((response) => {
-            res.render("users/order-confirmed");
-          });
+          if(req.body.paymetmethod === 'COD'){
+            res.json({codSuccess: true})
+          }else{
+            userHelpers.generateRazorpay(response.insertedId, total)
+          }
         });
+        userHelpers.deleteCart(req.body.userId)
       }else{
         console.log('cart is empty')
       }

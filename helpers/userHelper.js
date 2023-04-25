@@ -3,7 +3,12 @@ var collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
-const { date, object } = require('joi');
+const { date, object, options } = require('joi');
+const Razorpay = require('razorpay');
+var instance = new Razorpay({
+    key_id: 'rzp_test_bYaik8BIHFQdLC',
+    key_secret: 'Otf2FtyERzKpwAk9DY2OrGLp',
+  });
 
 
 
@@ -196,8 +201,8 @@ module.exports = {
                 date: Date.now()
                 
             }
-            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((resolved) => {
-                resolve()
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
+                resolve(response)
             })
         })
     },
@@ -241,6 +246,7 @@ module.exports = {
             resolve(address.address)
         })
     },
+    
     updateCartProductList: (order)=>{
         return new Promise(async(resolve,reject)=>{
             let cart = await db.get().collection(collection.CART_COLLECTION).updateOne({user: ObjectId(order)},{
@@ -252,6 +258,7 @@ module.exports = {
             resolve(cart)
         })
     },    
+
     deleteCart: (userId) => {
         return new Promise(async(resolve,reject)=>{
             db.get().collection(collection.CART_COLLECTION).deleteOne({user: ObjectId(userId)}).then((response)=>{
@@ -259,5 +266,23 @@ module.exports = {
             });
         })
     },
+
+    generateRazorpay: (orderId, total)=>{
+        console.log(typeof total[0].total);
+        return new Promise((resolve, reject)=>{
+            var options = {
+                amount: (total[0].total)*100,  // amount in the smallest currency unit
+                currency: "INR",
+                receipt: ""+orderId
+              };
+              instance.orders.create(options, function(err, order) {
+                if(err){
+                    console.log(err);
+                }else{
+                 console.log(order);   
+                }
+              });
+        })
+    }
 };
 

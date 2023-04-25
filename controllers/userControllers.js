@@ -157,6 +157,10 @@ module.exports = {
     } catch (error) {
       res.send(error) 
     }
+  },
+  showAddresses: async(req, res)=>{
+    let addresses = await userHelpers.getAddress(req.session.user._id);
+    res.render('users/view-address', {user: req.session.user, address: addresses})
   }
 };
  

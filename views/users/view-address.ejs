@@ -1,0 +1,52 @@
+<%- include('../partials/user-header', {cartCount: null})%>
+
+  <div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <a
+            href="cart.html">Cart</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Checkout</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-section">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-6 mb-5 mb-md-0">
+          <h2 class="h3 mb-3 text-black">Addresses</h2>
+          <form id="checkout-form" action="" method="post">
+            <div class="p-3 p-lg-5 border">
+
+              <%for(let i=0; i < address.length; i++){%>
+                <div class="card mb-3">
+                  <h5 class="card-header text-dark"><input type="radio" name="selectedaddress" value="<%=i%>">  <%=address[i].username%></h5>
+                  <div class="card-body text-dark">
+                    <h5 class="card-title text-dark"><%=address[i].mobile%></h5>
+                    <p class="card-text text-dark"><%=address[i].address%>, <%=address[i].district%>, <%=address[i].state%>.</p>
+                    <p class="card-text text-dark"><%=address[i].pincode%>.</p>                    
+                  </div>
+                </div>
+              <%}%>
+
+
+
+
+              <div class="form-group row mb-5">
+                <input type="text" class="form-control" id="c_phone" name="userId" placeholder="" value="<%=user._id%>"
+                  hidden>
+              </div>
+              
+
+              <div class="form-group">
+                <a href="/add-address" class="btn btn-primary btn-sm py-3 btn-block text-light">&plus; Add new Address.</a>
+              </div> 
+            </div>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+
+  <%- include('../partials/user-footer') %>
