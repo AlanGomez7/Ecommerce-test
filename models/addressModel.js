@@ -1,8 +1,8 @@
 const Joi = require("joi");
 
 const addressSchema = Joi.object({
-    username: Joi.string(),
-    mobile: Joi.string().length(10),
+    username: Joi.string().required(),
+    mobile: Joi.string().length(10).required(),
     pincode: Joi.string(),
     address: Joi.string().required(),
     state: Joi.string().required(),

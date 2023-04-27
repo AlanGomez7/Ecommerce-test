@@ -1,8 +1,11 @@
-const authToken = "2acfd3dfd76aea7548d57359592a8688";
+const router = require('../routes/users');
+require("dotenv").config()
+
+const authToken = "cce9f41c149f3cd0b9becc8dba2d2d8f";
 const accountSid= "AC4dbc5ee09c1902c8d09ad3cf24fd2765";
 const verifySid = "VA78b8b449952ff5208bf0bf5c400beea3";
-
 const client = require('twilio')(accountSid, authToken);
+
 module.exports = {
     
     sendOtp(mobileNo) {

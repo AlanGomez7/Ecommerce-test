@@ -15,13 +15,17 @@ router.get(
   adminController.viewProducts
 );
 
-router.route("/").get(adminController.login).post(adminController.postLogin);
+router.route("/")
+.get(adminController.login)
+.post(adminController.postLogin);
 
 router.get(
   "/add-product",
   middleware.verifyAdmin,
   productController.AddProductFunc
 );
+
+router.get('/dashboard', adminController.getDashboard)
 
 router.post(
   "/add-product",

@@ -89,9 +89,9 @@ module.exports = {
         })
     },
 
-    getOrders: ()=>{
+    getOrders: (skip, pageSize)=>{
         return new Promise ((resolve, reject) => {
-            let orders = db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+            let orders = db.get().collection(collection.ORDER_COLLECTION).find().skip(skip).limit(pageSize).toArray()
             resolve(orders)  
         })
     },
@@ -151,6 +151,30 @@ module.exports = {
             resolve()  
         })
     },
-    
+
+    cancelledOrderCount: ()=>{
+        return new Promise (async(resolve, reject) => {
+            var count = await db.get().collection(collection.ORDER_COLLECTION).countDocuments({status: 'cancelled'})
+            resolve(count)
+        })
+    },
+
+    placedOrderCount: ()=>{
+        return new Promise (async(resolve, reject) => {
+            var count = await db.get().collection(collection.ORDER_COLLECTION).countDocuments({status: 'Placed'})
+            resolve(count)
+        })
+    },
+
+    pendingOrderCount: ()=>{
+        return new Promise (async(resolve, reject) => {
+            var count = await db.get().collection(collection.ORDER_COLLECTION).countDocuments({status: 'pending'})
+            resolve(count)
+        })
+    },
+    findOrderCount: async () => {
+        let countUsers = await db.get().collection(collection.ORDER_COLLECTION).countDocuments()
+        return countUsers
+    },
     
 }

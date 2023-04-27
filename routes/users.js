@@ -73,5 +73,7 @@ router.get('/order-success', (req, res) => {
   res.render('users/order-confirmed')
 })
 
-router.get("/manage-addresses", middleware.verifyLoggin, userController.showAddresses)
+router.post('/verify-payment', userController.verifyPayment);
+router.get("/manage-addresses", middleware.verifyLoggin, userController.showAddresses);
+
 module.exports = router;

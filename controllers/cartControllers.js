@@ -1,5 +1,4 @@
 const userHelpers = require("../helpers/userHelper");
-const addressSchema = require("../models/addressModel");
 const productHelpers = require('../helpers/productHelper');
 const createHttpError = require("http-errors");
 var cartCount = 0
@@ -28,17 +27,18 @@ module.exports = {
   },
 
   checkout_post: async (req, res) => {
-    console.log(req.body, "++++++++++++++++++++++++++")
     try {
       var cartProducts = await userHelpers.getCartProductList(req.body.userId);
       if(cartProducts.length > 0){
         var address = await userHelpers.getAddress(req.body.userId)
         var total = await userHelpers.getTotalAmount(req.body.userId);
         userHelpers.placeOrder(address[req.body.selectedaddress], cartProducts, total[0].total, req.body).then((response) => {
-          if(req.body.paymetmethod === 'COD'){
-            res.json({codSuccess: true})
-          }else{
-            userHelpers.generateRazorpay(response.insertedId, total)
+          if(req.body.paymentmethod === 'COD'){
+           res.send({message: "success"})
+          }else if(req.body.paymentmethod === 'onlinePayment'){
+            userHelpers.generateRazorpay(response.insertedId, total).then((response) => {
+              res.json(response)
+            })
           }
         });
         userHelpers.deleteCart(req.body.userId)
@@ -67,7 +67,6 @@ module.exports = {
         let total = await userHelpers.getTotalAmount(req.session.user._id);
         res.render('users/cart', { products, user: req.session.user, cartCount, total: total[0].total });
       }
-
     } else {
       res.redirect('/login');
     }

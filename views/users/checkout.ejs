@@ -40,7 +40,7 @@
               
 
               <div class="form-group">
-                <button class="btn btn-primary btn-sm py-3 btn-block" type="submit">&plus; Add new Address.</button>
+                <a class="btn btn-primary btn-sm py-3 btn-block" href="/add-address">&plus; Add new Address.</a>
               </div> 
             </div>
         </div>
@@ -206,8 +206,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="sweetalert2.min.js"></script>
   <script src="/js/main1.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    function checkOut(id) {
+    function checkOut() {
       let form = document.getElementById('checkout-form');
       form.addEventListener('submit', event => {
         event.preventDefault();
@@ -218,12 +219,65 @@
         fetch('/checkout',{
           method: 'POST',
           body: data,
-        }).then((response)=>{
+        }).then(r => r.json())
+        .then(response => {
           if(response.codSuccess){
             location.href = '/order-success'
+          }else{
+            
+            razorPayment(response)
           }
         }) 
       })
+    }
+
+    function razorPayment(order){
+      var options = { 
+        "key": "rzp_test_bYaik8BIHFQdLC", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Shopper",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            verifyPayment(response, order)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+    }
+
+    function verifyPayment(payment, order){
+      fetch('/verify-payment', {
+        method: "POST",
+        body: JSON.stringify({
+          payment,
+          order
+        }),
+        headers:{
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(r => r.json())
+        .then(response => {
+          console.log(response)
+          if(response.status){
+            location.href = '/order-success'
+          }else{           
+            alert('Payment Failed')
+          }
+        }) 
     }
   </script>
 </body>

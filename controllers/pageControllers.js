@@ -29,7 +29,7 @@ module.exports = {
       userHelpers.getUser(user).then((currentUser) => {
         
   
-        res.render('users/edit-profile', { currentUser, cartCount, user: req.session.user});
+        res.render('users/edit-profile', { currentUser, cartCount, user: req.session.user, result: 0});
       });
 
     }else{

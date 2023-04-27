@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 const { date, object, options } = require('joi');
 const Razorpay = require('razorpay');
+const { resolve } = require('path');
 var instance = new Razorpay({
     key_id: 'rzp_test_bYaik8BIHFQdLC',
     key_secret: 'Otf2FtyERzKpwAk9DY2OrGLp',
@@ -180,9 +181,9 @@ module.exports = {
         });
     },
     placeOrder: (order, products, total, user)=>{
-        console.log(order.userId)
+
         return new Promise((resolve, reject)=>{
-            let status = user.paymentmethod === 'COD' ? 'placed': 'pending';
+            let status = user.paymentmethod == 'COD' ? 'Placed': 'Pending';
             let orderObj={
                 deliveryDetails: {
                     username: order.username,
@@ -198,13 +199,13 @@ module.exports = {
                 paymentMethod: user.paymentmethod ,
                 status: status,
                 total: total,
-                date: Date.now()
-                
+                date: new Date()
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 resolve(response)
             })
         })
+
     },
 
     decreaseStock: (id)=>{
@@ -280,9 +281,56 @@ module.exports = {
                     console.log(err);
                 }else{
                  console.log(order);   
+                 resolve(order);
                 }
               });
         })
-    }
+    },
+
+
+    verifyPayment: (details)=>{
+        return new Promise((resolve, reject)=>{
+            const crypto = require('crypto');
+            let hmac = crypto.createHmac('sha256', 'Otf2FtyERzKpwAk9DY2OrGLp')
+            hmac.update(details.payment.razorpay_order_id+ '|' + details.payment.razorpay_payment_id )
+            hmac = hmac.digest('hex')
+              if(hmac === details.payment.razorpay_signature){
+                console.log('verified')
+                resolve()
+              }else{
+                reject()
+              }
+        })
+    },
+
+    changeStatus: (orderId)=>{
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({
+                _id: ObjectId(orderId)
+            },
+            {
+                $set:{
+                  status: "Placed"  
+                }
+            })
+        }).then((response)=>{
+            resolve()
+        })
+    },
+
+    getOrderCount: ()=>{
+        return new Promise(async(resolve, reject)=>{
+            let stats = db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $group: {
+                        _id: { $month: "$date" }, // Group by month of the "date" field
+                        totalAmount: { $sum: "$total" } // Calculate the sum of the "amount" field
+                    }
+                }
+            ]).toArray()
+            resolve(stats)
+        })
+    },
+    
 };
 
