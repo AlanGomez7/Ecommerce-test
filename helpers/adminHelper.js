@@ -96,6 +96,13 @@ module.exports = {
         })
     },
 
+    getAllOrders: ()=>{
+        return new Promise ((resolve, reject) => {
+            let orders = db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+            resolve(orders)  
+        })
+    },
+
     getOrderProducts: (orderId) => {
         return new Promise(async (resolve, reject) => {
           let orderItems = await db
@@ -176,5 +183,28 @@ module.exports = {
         let countUsers = await db.get().collection(collection.ORDER_COLLECTION).countDocuments()
         return countUsers
     },
+    getBanners: ()=>{
+        return new Promise(async(resolve, reject) => {
+            let banners = await db.get().collection(collection.BANNER_COLLECTION).find().toArray()
+            resolve(banners)
+        })
+    },
+    addBanner: (banner, callback) => {
+        db.get()
+          .collection(collection.BANNER_COLLECTION)
+          .insertOne(banner)
+          .then((data) => {
+            console.log(data);
+            callback(data.insertedId);
+        });
+    },
+    
+    deleteBanner: (bannerId) => {
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.BANNER_COLLECTION).deleteOne({_id: ObjectId(bannerId)}).then((response)=>{
+                resolve(response)
+            });
+        })
+    },
     
 }

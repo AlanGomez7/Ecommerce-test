@@ -56,8 +56,7 @@
                     <%for(let i = 0; i < products.length; i++){ %>
                         
                         <article class="itemlist">
-                            
-                            <!-- ----------------------------------------------------- -->
+                            <!-- ------------------------------------------------------->
                             <div class="row align-items-center">
                                 <div class="col col-check flex-grow-0">
                                     <div class="form-check">
@@ -93,11 +92,9 @@
                                             <i class="material-icons md-delete_forever"></i> Unlist
                                         </button>
                                     <%}else{%>
-
                                         <button onclick="listProduct('<%= products[i]._id%>')" class="btn btn-sm font-sm  rounded" style="background-color: rgb(60, 106, 60);" id="list-product">
                                             <i class="material-icons md-delete_forever"></i> List
                                         </button>
-                                        
                                     <%}%>
                                 </div>
                             </div> <!-- row .// -->

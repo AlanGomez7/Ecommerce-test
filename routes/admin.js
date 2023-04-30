@@ -61,6 +61,11 @@ router.patch("/unblock-user/:id", (req, res) => {
   res.redirect("/admin/manage-user");
 });
 
+router.get('/banners', adminController.viewBanners);  
+router.post('/banners', upload.array("Image"),adminController.addBanner);
+router.get('/delete-banner/:id', adminController.deleteBanner)
+
+
 router
   .route("/edit-product/:id", middleware.adminLoggedIn)
   .get(productController.editProduct)

@@ -1,6 +1,8 @@
 const userHelpers = require("../helpers/userHelper");
 const productHelpers = require('../helpers/productHelper');
 const createHttpError = require("http-errors");
+let crypto = require("crypto");
+
 var cartCount = 0
 
 module.exports = {
@@ -34,8 +36,8 @@ module.exports = {
         var total = await userHelpers.getTotalAmount(req.body.userId);
         userHelpers.placeOrder(address[req.body.selectedaddress], cartProducts, total[0].total, req.body).then((response) => {
           if(req.body.paymentmethod === 'COD'){
-           res.send({message: "success"})
-          }else if(req.body.paymentmethod === 'onlinePayment'){
+           res.send({codSuccess: true})
+          }else{
             userHelpers.generateRazorpay(response.insertedId, total).then((response) => {
               res.json(response)
             })

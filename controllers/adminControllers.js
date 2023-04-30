@@ -77,7 +77,7 @@ module.exports = {
   viewCategory: (req, res) => {
     adminHelpers.getCategories().then((categories) => {
       console.log(categories);
-      res.render("admin/view-categories", { categories });
+      res.render("admin/view-categories", { categories, banners: false });
     });
   },
 
@@ -117,7 +117,7 @@ module.exports = {
   },
 
   getDashboard: async (req, res) => {
-    let orders = await adminHelpers.getOrders();
+    let orders = await adminHelpers.getAllOrders();
 
     let cancelCount = await adminHelpers.cancelledOrderCount();
     let pendingCount = await adminHelpers.pendingOrderCount();
@@ -126,7 +126,7 @@ module.exports = {
     let result = [];
     result.push(cancelCount, placedCount, pendingCount);
 
-    let stats = await userHelper.getOrderCount();
+    let stats = await userHelper.orderCount();
     
     let data = [0,0,0,0,0,0,0,0,0,0,0,0];
     for(let i = 0; i < stats.length; i++) {
@@ -134,4 +134,37 @@ module.exports = {
     }
     res.render("admin/dashboard", { result, order: orders.length, data });
   },
+
+  viewBanners: async(req, res) => {
+    let banners = await adminHelpers.getBanners()
+    res.render("admin/view-banners", {banners})
+  },
+
+  addBanner: async (req, res) => {
+    
+    try {
+      const imgUrl = [];
+      for (let i = 0; i < req.files.length; i++) {
+        const result = await cloudinary.uploader.upload(req.files[i].path);
+        imgUrl.push(result.url);
+      }
+      adminHelpers.addBanner(req.body, async (id) => {
+        console.log(id);
+        productHelpers.addBannerImages(id, imgUrl).then((response) => {
+          // console.log(response);
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      req.session.submitStatus = "Banner Added";
+      res.redirect("/admin/banners");
+    }
+  },
+  deleteBanner: (req, res)=>{
+    adminHelpers.deleteBanner(req.params.id).then((response)=>{
+      res.json({deleted: true})
+    })
+  }
+
 };

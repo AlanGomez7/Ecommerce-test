@@ -9,16 +9,20 @@ let cartCount = 0;
 module.exports = {
   // landing Page function.
   landingPage: async (req, res) => {
+    let homeBanner; 
     let user = req.session.user;
+    let banners = await adminHelper.getBanners()
     if (req.session.user) {
       cartCount = await userHelpers.getCartCount(req.session.user._id);
-      console.log(cartCount);
     }
     let products=await productHelpers.getProducts()
     console.log(products);
-      adminHelper.getCategories().then((category) => {
-        res.render('users/landing-page', { user, product: products, cartCount, category });
-      });
+      let category = adminHelper.getCategories()
+
+
+      console.log(homeBanner);
+      res.render('users/landing-page', { user, product: products, cartCount, category, banners});
+
   },
 
   // Profile Editing function.

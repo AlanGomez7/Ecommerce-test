@@ -80,6 +80,26 @@ module.exports = {
     });
   },
 
+  addBannerImages: (bannerId, imgUrl) => {
+  
+    return new Promise(async (resolve, reject) => {
+      console.log(imgUrl);
+      db.get()
+        .collection(collection.BANNER_COLLECTION)
+        .updateOne(
+          { _id: new ObjectId(bannerId) },
+          {
+            $set: {
+              image: imgUrl,
+            },
+          }
+        )
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  },
+
   deleteProduct: (proid) => {
     return new Promise((resolve, reject) => {
       db.get()

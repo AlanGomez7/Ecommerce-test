@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { date, object, options } = require('joi');
 const Razorpay = require('razorpay');
 const { resolve } = require('path');
+const crypto = require("crypto");
 var instance = new Razorpay({
     key_id: 'rzp_test_bYaik8BIHFQdLC',
     key_secret: 'Otf2FtyERzKpwAk9DY2OrGLp',
@@ -26,7 +27,6 @@ module.exports = {
         })
     }, 
      doLogin:(userData)=>{
-        console.log(userData,">>>>>>>")
         return new  Promise(async(resolve, reject)=>{
             let loginStatus = false;
             let response = {};
@@ -185,6 +185,7 @@ module.exports = {
         return new Promise((resolve, reject)=>{
             let status = user.paymentmethod == 'COD' ? 'Placed': 'Pending';
             let orderObj={
+                orderId: crypto.randomUUID(),
                 deliveryDetails: {
                     username: order.username,
                     address: order.address,
@@ -317,8 +318,7 @@ module.exports = {
             resolve()
         })
     },
-
-    getOrderCount: ()=>{
+    orderCount: ()=>{
         return new Promise(async(resolve, reject)=>{
             let stats = db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {

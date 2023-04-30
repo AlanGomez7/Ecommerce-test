@@ -5,6 +5,7 @@ const addressSchema = require("../models/addressModel")
 const jwt = require("jsonwebtoken");
 const resetPasswordAuth = require("../utils/twilio");
 const { use } = require("../routes/users");
+let crypto = require("crypto");
 const maxAge = 3 * 24 * 60 * 60;
 let cartCount = 0;
 const createToken = (id) => {
@@ -24,10 +25,11 @@ module.exports = {
       // if (error) throw createError.BadRequest('Invalid Credentials.');
 
       let response = await userHelpers.getUser(req.body);
-      let { email, username, password, mobile } = req.body;
+      let { email, username, password, mobile} = req.body;
+      let uniqueId = crypto.randomUUID();
       if (response === null) {
         userHelpers
-          .doSignup({ email, username, password, mobile })
+          .doSignup({ email, username, password, mobile, uniqueId})
           .then((response) => {
             if (response) {
               console.log(req.session.user);
@@ -163,6 +165,7 @@ module.exports = {
     let addresses = await userHelpers.getAddress(req.session.user._id);
     res.render('users/view-address', {user: req.session.user, address: addresses})
   },
+
   verifyPayment: (req, res) => {
     console.log(req.body.order.receipt)
     userHelpers.verifyPayment(req.body).then((response) => {
@@ -175,8 +178,5 @@ module.exports = {
       res.json({status: false, message: err.message})
     })
   },
-  userList: async(req,res)=>{
-    
-    },
 };
  

@@ -36,11 +36,13 @@ module.exports = {
   },
 
   postAddProduct: async (req, res) => {
-
+    console.log(req.body, "LLLLLLLLLL")
+    
     try {
       req.body.stock = +req.body.stock;
       req.body.price = +req.body.price;
-      console.log(req.file);
+      
+
       const imgUrl = [];
       
       for (let i = 0; i < req.files.length; i++) {
