@@ -143,7 +143,14 @@ module.exports = {
 
     getOrderDetails: (userId)=>{
         return new Promise (async(resolve, reject) => {
-            let order = await db.get().collection(collection.ORDER_COLLECTION).find({_id: ObjectId(userId)}).toArray()
+            let order = await db.get().collection(collection.ORDER_COLLECTION).find({userId: ObjectId(userId)}).toArray()
+            resolve(order)  
+        })
+    },
+
+    orderDetails: (Id)=>{
+        return new Promise (async(resolve, reject) => {
+            let order = await db.get().collection(collection.ORDER_COLLECTION).find({_id: ObjectId(Id)}).toArray()
             resolve(order)  
         })
     },

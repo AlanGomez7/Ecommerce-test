@@ -99,7 +99,7 @@ module.exports = {
   },
 
   orderDetails: async (req, res) => {
-    let orderDetails = await adminHelpers.getOrderDetails(req.params.id);
+    let orderDetails = await adminHelpers.orderDetails(req.params.id);
     let products = await adminHelpers.getOrderProducts(req.params.id);
     console.log(orderDetails);
     res.render("admin/order-details", {
@@ -109,7 +109,7 @@ module.exports = {
     });
   },
 
-  cancelOrder: async (req, res) => {
+  adminCancelOrder: async (req, res) => {
     console.log(req.params.id);
     adminHelpers.cancelOrder(req.params.id).then((response) => {
       res.send(response);

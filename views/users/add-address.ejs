@@ -3,66 +3,59 @@
 
     </header>
 
-    <body ">
+    <body>
       <div class="screen-overlay"></div>
 
       <main class="main-wrap">
 
         <section class="content-main">
-          <div class="row">
-            <div class="col-6">
-              <div class="content-header">
-                <h2 class="content-title">Edit Profile</h2>
-              </div>
-            </div>
-          </div>
+          
           <div class="row">
             <div class="col-lg-6">
               <div class="card mb-4">
                 <form  id="address-form">
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-md-3">
-                        <h6>Address</h6>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="content-header">
+                            <h2 class="content-title">Address</h2>
+                          </div>
+                        </div>
                       </div>
+
                       <div class="col-md-9">
-                        <div class="mb-4">
-                          <label class="form-label">Name</label>
-                          <input type="text" placeholder="Full Name" name="username" class="form-control" value="">
+                        <div class="mb-4 d-flex">
+                          <input type="text" placeholder="Full Name" name="username" class="form-control mr-2" value="">
+                          <input type="text" placeholder="10-digit Mobile no" name="mobile" class="form-control" value="">
                         </div>
-                        <div class="mb-4">
-                          <label class="form-label">Mobile</label>
-                          <input type="text" placeholder="10-digit Mobile no" name="mobile" class="form-control"
-                            value="">
-                        </div> 
-                        <div class="mb-4">
-                          <label class="form-label">Pincode</label>
-                          <input type="text" placeholder="Type here" name="pincode" class="form-control" value="">
+                    
+                        <div class="mb-4 d-flex">
+                          <input type="text" placeholder="Pincode" name="pincode" class="form-control mr-2" value="">
+                          <input placeholder="Locality" class="form-control" name="locality" rows="4" value="">
                         </div>
+
+                        
                         <div class="mb-4">
-                          <label class="form-label">Address with Locality</label>
-                          <input placeholder="Address" class="form-control" name="address" rows="4" value="">
+                          <textarea placeholder="Type here" class="form-control" name="address" rows="4" value=""></textarea>
                         </div>
-                        <div class="mb-4">
-                          <label class="form-label">state</label>
-                          <input placeholder="Type here" class="form-control" name="state" rows="4" value="">
+
+                        <div class="mb-4 d-flex"> 
+                          <input placeholder="District" class="form-control mr-2" name="district" rows="4" value="">
+                          <input placeholder="State" class="form-control" name="state" rows="4" value="">
                         </div>
+
                         <div class="mb-4">
-                          <label class="form-label">District</label>
-                          <input placeholder="Type here" class="form-control" name="district" rows="4" value="">
-                        </div>
-                        <div class="mb-4">
-                          <label class="form-label">Alternate Mobile</label>
-                          <input placeholder="Mobile" class="form-control" name="alternatemobile" rows="4" value="">
+                          <input placeholder="Mobile" class="form-control mr-2" name="alternatemobile" rows="4" value="">
                         </div>
                       </div> <!-- col.// -->
                     </div> <!-- row.// -->
                     <hr class="mb-4 mt-0">
-                    <!-- row.// -->
+
                     <div class="d-flex justify-content-center">
                       <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
-                      <button class="btn btn-md rounded font-sm hover-up mb-5" type="submit"
-                        style="background-color: blueviolet;"\
+                      <button class="btn btn-lg text-white rounded font-sm hover-up mb-5" type="submit"
+                        style="background-color: blueviolet;"
                         onclick="addAddress('<%=currentUser._id%>')">Update</button>
                     </div>
                 </form>

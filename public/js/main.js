@@ -281,7 +281,6 @@ const grantAccess = () => {
 };
 
 function addToCart(id) {
-	let count = document.getElementById('cart-count').innerText;
 	let url = '/add-to-cart/' + id;
 	fetch(url, {
 	  method: 'GET'
@@ -291,7 +290,7 @@ function addToCart(id) {
 	  let count = document.getElementById('cart-count').innerText;
 		let numericalCount = +count + 1
 		document.getElementById('cart-count').innerText = numericalCount 
-		
+
 	  }
 	})
 }

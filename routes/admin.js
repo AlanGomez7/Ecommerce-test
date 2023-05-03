@@ -83,5 +83,5 @@ router.get("/orders", middleware.verifyAdmin,adminController.getOrder);
 
 router.get("/order-details/:id",middleware.verifyAdmin,adminController.orderDetails)
 
-router.patch('/cancel-order/:id',middleware.verifyAdmin, adminController.cancelOrder)
+router.get('/cancel-order/:id',middleware.verifyAdmin, adminController.adminCancelOrder)
 module.exports = router;

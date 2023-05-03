@@ -73,15 +73,28 @@
       </div>
     </div>  
 
+
+    
     <div class="site-section">
       <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <span class="icon-check_circle display-3 text-success"></span>
-            <h2 class="display-3 text-black">Thank you!</h2>
-            <p class="lead mb-5">You order was successfuly completed.</p>
-            <p><a href="/shop" class="btn btn-sm btn-primary">Back to shop</a></p>
+
+        <div class="card mt-3 shadow-sm">
+          <h5 class="card-header bg-white text-black">Hey Thank you!</h5>
+          <div class="card-body">
+            <h5 class="card-title text-black">Your Order has been placed for RS: <%=order[0].total%></h5> 
           </div>
+        </div>
+      
+        <div class="card mt-3 shadow-sm">
+          <h5 class="card-header text-black">Order Details</h5>
+          <%for(let i = 0; i < products.length; i++){%>
+            <div class="card-body">
+              <img src="<%=products[i].product.image%>" alt="" srcset="" style="height: auto; width: 50px;">
+              <h5 class="card-title text-black"><%=products[i].product.title%></h5>
+              <p class="card-text text-black"><%=products[i].product.description%></p>
+              <a href="/cancel-order/<%=order[0]._id%>" class="">Cancel Order</a>
+            </div>
+          <%}%>
         </div>
       </div>
     </div>

@@ -2,8 +2,6 @@ var db = require('../config/connection');
 var collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
-const mongoose = require('mongoose');
-const { date, object, options } = require('joi');
 const Razorpay = require('razorpay');
 const { resolve } = require('path');
 const crypto = require("crypto");
@@ -11,8 +9,6 @@ var instance = new Razorpay({
     key_id: 'rzp_test_bYaik8BIHFQdLC',
     key_secret: 'Otf2FtyERzKpwAk9DY2OrGLp',
   });
-
-
 
 
 module.exports = {
@@ -180,8 +176,9 @@ module.exports = {
             resolve(total);
         });
     },
+    
     placeOrder: (order, products, total, user)=>{
-
+        console.log(order)
         return new Promise((resolve, reject)=>{
             let status = user.paymentmethod == 'COD' ? 'Placed': 'Pending';
             let orderObj={

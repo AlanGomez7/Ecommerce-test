@@ -5,6 +5,9 @@ const pageController = require("../controllers/pageControllers");
 const productController = require("../controllers/productControllers");
 const middleware = require("../middleware/loginmiddleware");
 const cartControllers = require("../controllers/cartControllers");
+const userHelper = require("../helpers/userHelper");
+const productHelper = require("../helpers/productHelper");
+const adminHelper = require("../helpers/adminHelper");
 
 
 // login route for user
@@ -69,11 +72,13 @@ router.get('/add-address', userController.addAddress)
 router.put('/add-address/:id', userController.storeAddress)
 
 
-router.get('/order-success', (req, res) => {
-  res.render('users/order-confirmed')
-})
+router.get('/order-success', userController.orderSuccess)
+
+router.post('/orders/razorpay-success', cartControllers.orderSuccess)
 
 router.post('/verify-payment', userController.verifyPayment);
 router.get("/manage-addresses", middleware.verifyLoggin, userController.showAddresses);
+
+router.patch('/cancel-order/:id',middleware.verifyLoggin, userController.userCancelOrder)
 
 module.exports = router;

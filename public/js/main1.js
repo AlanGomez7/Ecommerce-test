@@ -97,29 +97,6 @@ function addToCart(id) {
   })
 }
 
-function changeQuantity(cartId, proId, userId,count){
-  
-  fetch('/change-product-quantity', {
-    method: 'POST',
-    body: JSON.stringify({
-      cartId: cartId,
-      proId: proId,
-      count: count,
-      userId: userId
-  }),
-  // Adding headers to the request
-  headers: {
-      "Content-type": "application/json; charset=UTF-8"
-  }
-  }).then(async(response)=>{
-    let quantity = document.getElementById(proId).value;
-    let updatedQuantity = +quantity + count;
-    document.getElementById(proId).value = updatedQuantity
 
-    let res = await response.json()
-    
-    document.getElementById('total').innerHTML = res.total
-  })
-}
 
 

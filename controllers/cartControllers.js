@@ -1,7 +1,7 @@
 const userHelpers = require("../helpers/userHelper");
 const productHelpers = require('../helpers/productHelper');
+const adminHelpers = require('../helpers/adminHelper');
 const createHttpError = require("http-errors");
-let crypto = require("crypto");
 
 var cartCount = 0
 
@@ -12,7 +12,24 @@ module.exports = {
       let total = await userHelpers.getTotalAmount(req.session.user._id);
       if(total.length === 0)throw createHttpError.NotFound('Cart is empty')
       var address = await userHelpers.getAddress(req.session.user._id);
-      res.render("users/checkout", { user: req.session.user, total: total[0].total, address, cartCount});
+
+      if(address === undefined){
+        res.render("users/checkout", {
+           user: req.session.user,
+           total: total[0].total,
+           cartCount,
+           hasAddress: false,
+           currentUser: req.session.user
+        });
+      }else{
+        res.render("users/checkout", { 
+          user: req.session.user, 
+          total: total[0].total,
+          address, cartCount, 
+          hasAddress : true, 
+          currentUser: req.session.user
+        }); 
+      }
     }catch(err){
       res.send(err)
     }
@@ -35,6 +52,7 @@ module.exports = {
         var address = await userHelpers.getAddress(req.body.userId)
         var total = await userHelpers.getTotalAmount(req.body.userId);
         userHelpers.placeOrder(address[req.body.selectedaddress], cartProducts, total[0].total, req.body).then((response) => {
+          req.session.currentOrder = response.insertedId;
           if(req.body.paymentmethod === 'COD'){
            res.send({codSuccess: true})
           }else{
@@ -43,7 +61,6 @@ module.exports = {
             })
           }
         });
-        userHelpers.deleteCart(req.body.userId)
       }else{
         console.log('cart is empty')
       }
@@ -53,8 +70,9 @@ module.exports = {
   },
 
   changeProductQuantity: (req, res) => {
-    userHelper.changeProductQuantity(req.body).then(async(response)=>{
-    response.total = await userHelper.getTotalAmount(req.body.userId)
+    userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+    let total = await userHelpers.getTotalAmount(req.body.userId)
+    response.total = total[0].total
      res.json(response)
     })
   },
@@ -80,4 +98,19 @@ module.exports = {
       res.send(response);
     });
   },
+
+  orderSuccess: async(req, res, err) =>{
+    if(!req.body.razorpay_signature){
+      res.redirect('/chekout')
+    }else{
+      console.log(req.session.user._id)
+      userHelpers.deleteCart(req.session.user._id)
+      
+      let order = await adminHelpers.orderDetails(req.session.currentOrder);
+      let products = await adminHelpers.getOrderProducts(req.session.currentOrder);
+      console.log(products)
+      res.render('users/order-confirmed', {order, products})
+    }
+  }
+
 };

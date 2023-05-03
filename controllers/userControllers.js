@@ -1,7 +1,8 @@
 const userHelpers = require("../helpers/userHelper");
 const createError = require("http-errors");
 const authSchema = require("../models/authmodel");
-const addressSchema = require("../models/addressModel")
+const addressSchema = require("../models/addressModel");
+const adminHelpers = require("../helpers/adminHelper");
 const jwt = require("jsonwebtoken");
 const resetPasswordAuth = require("../utils/twilio");
 const { use } = require("../routes/users");
@@ -141,7 +142,6 @@ module.exports = {
     if(user) {
       userHelpers.getUser(user).then((currentUser) => {
         res.render('users/add-address',{ currentUser, cartCount, user: req.session.user, result: 0});
-        // res.render('users/edit-profile', );
       });
 
     }else{
@@ -153,7 +153,7 @@ module.exports = {
     try {
       console.log(req.body)
       var {error, value} = await addressSchema.addressSchema.validate(req.body);
-        if(error) throw new Error(error);
+      if(error) throw new Error(error);
       userHelpers.addAddress(value, req.params.id).then((response) => {
         res.send(response)
       })
@@ -162,12 +162,18 @@ module.exports = {
     }
   },
   showAddresses: async(req, res)=>{
+    console.log(req.session.user._id)
     let addresses = await userHelpers.getAddress(req.session.user._id);
-    res.render('users/view-address', {user: req.session.user, address: addresses})
+    console.log(addresses)
+    if(addresses=== undefined){
+      res.redirect('add-address')
+    }else{
+      res.render('users/view-address', {user: req.session.user, address: addresses})
+    }
   },
 
   verifyPayment: (req, res) => {
-    console.log(req.body.order.receipt)
+    console.log(req.body, "order")
     userHelpers.verifyPayment(req.body).then((response) => {
       console.log('success')
       userHelpers.changeStatus(req.body.order.receipt).then(()=>{
@@ -178,5 +184,20 @@ module.exports = {
       res.json({status: false, message: err.message})
     })
   },
+
+  userCancelOrder: async (req, res) => {
+    console.log(req.params.id);
+    adminHelpers.cancelOrder(req.params.id).then((response) => {
+      res.send(response);
+    });
+  },
+  
+  orderSuccess: async(req, res) => {
+    console.log(req.session.user._id)
+    let order = await adminHelpers.orderDetails(req.session.currentOrder);
+    let products = await adminHelpers.getOrderProducts(req.session.currentOrder);
+    userHelpers.deleteCart(req.session.user._id)
+    res.render('users/order-confirmed', {order, products})
+  }
 };
  
