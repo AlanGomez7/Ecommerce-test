@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const resetPasswordAuth = require("../utils/twilio");
 const { use } = require("../routes/users");
 let crypto = require("crypto");
+const productHelper = require("../helpers/productHelper");
 const maxAge = 3 * 24 * 60 * 60;
 let cartCount = 0;
 const createToken = (id) => {
@@ -17,20 +18,24 @@ const createToken = (id) => {
 
 module.exports = {
   signupFunction: (req, res) => {
-    res.render("users/signup", { signupErr: req.session.signupErr });
+    let error = ""
+    res.render("users/signup", { error });
   },
 
   postSignupFunction: async (req, res) => {
     try {
-      // var { error, value } = await authSchema.SignupSchema.validate(req.body);
-      // if (error) throw createError.BadRequest('Invalid Credentials.');
+      var { error, value } = await authSchema.SignupSchema.validate(req.body);
+      if (error) throw createError.BadRequest("Invalid inputs")
 
       let response = await userHelpers.getUser(req.body);
-      let { email, username, password, mobile} = req.body;
       let uniqueId = crypto.randomUUID();
+      let wallet=0;
+      value.uniqueId = uniqueId;
+      value.isAllowed = true; 
+      value.wallet = wallet;
       if (response === null) {
         userHelpers
-          .doSignup({ email, username, password, mobile, uniqueId})
+          .doSignup(value)
           .then((response) => {
             if (response) {
               console.log(req.session.user);
@@ -45,11 +50,9 @@ module.exports = {
         throw createError.BadRequest("Already a user");
       }
     } catch (error) {
-      res.send({
-        error: {
-          message: error.message,
-        },
-      });
+      if(error){
+        res.render('users/signup', {error: error.message});
+      }
     }
   },
 
@@ -173,7 +176,7 @@ module.exports = {
   },
 
   verifyPayment: (req, res) => {
-    console.log(req.body, "order")
+    console.log(req.body, "ord")
     userHelpers.verifyPayment(req.body).then((response) => {
       console.log('success')
       userHelpers.changeStatus(req.body.order.receipt).then(()=>{
@@ -187,8 +190,13 @@ module.exports = {
 
   userCancelOrder: async (req, res) => {
     console.log(req.params.id);
+    let order = await adminHelpers.orderDetails(req.params.id)
+    console.log(order)
     adminHelpers.cancelOrder(req.params.id).then((response) => {
-      res.send(response);
+      if(order[0].status === "Placed" && order.paymentMethod !== "COD"){
+        adminHelpers.returnMoney(order[0].userId, order[0].total)
+      }
+      res.redirect('/orders');
     });
   },
   
@@ -198,6 +206,13 @@ module.exports = {
     let products = await adminHelpers.getOrderProducts(req.session.currentOrder);
     userHelpers.deleteCart(req.session.user._id)
     res.render('users/order-confirmed', {order, products})
+  },
+  orders_get: async(req, res) => {
+    let products = await adminHelpers.userOrderedProducts(req.session.user._id);
+    let order = await adminHelpers.getOrderDetails(req.session.user._id);
+
+    console.log(products)
+    res.render('users/orders', {products, order})
   }
 };
  

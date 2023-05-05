@@ -7,8 +7,8 @@ const createError = require("http-errors");
 const adminHelpers = require("../helpers/adminHelper");
 const productHelpers = require("../helpers/productHelper");
 const authSchema = require("../models/authmodel");
-const Joi = require("joi");
 const userHelper = require("../helpers/userHelper");
+const crypto = require("crypto")
 
 module.exports = {
   login: (req, res, next) => {
@@ -111,14 +111,27 @@ module.exports = {
 
   adminCancelOrder: async (req, res) => {
     console.log(req.params.id);
+    let order = await adminHelpers.orderDetails(req.params.id)
+    console.log(order)
     adminHelpers.cancelOrder(req.params.id).then((response) => {
+      if(order[0].status === "Placed" && order.paymentMethod !== "COD"){
+        adminHelpers.returnMoney(order[0].userId, order[0].total)
+      }
+      res.send(response);
+    });
+  },
+
+  deliveredOrder: async (req, res) => {
+    console.log(req.params.id);
+    adminHelpers.deliveredOrder(req.params.id).then((response) => {
       res.send(response);
     });
   },
 
   getDashboard: async (req, res) => {
     let orders = await adminHelpers.getAllOrders();
-
+    let amount = await adminHelpers.totalOrderAmount();
+    console.log(amount)
     let cancelCount = await adminHelpers.cancelledOrderCount();
     let pendingCount = await adminHelpers.pendingOrderCount();
     let placedCount = await adminHelpers.placedOrderCount();
@@ -132,7 +145,8 @@ module.exports = {
     for(let i = 0; i < stats.length; i++) {
       data[stats[i]._id] = stats[i].totalAmount;
     }
-    res.render("admin/dashboard", { result, order: orders.length, data });
+    console.log(stats);
+    res.render("admin/dashboard", { result, order: orders.length, data, amount });
   },
 
   viewBanners: async(req, res) => {
@@ -165,6 +179,25 @@ module.exports = {
     adminHelpers.deleteBanner(req.params.id).then((response)=>{
       res.json({deleted: true})
     })
+  },
+  getCoupons: async(req, res)=>{
+   
+    let coupons = await adminHelpers.getCoupons();
+
+    res.render("admin/coupons", {coupons})
+  }, 
+  createCode: async(req, res)=>{
+
+    console.log(req.body)
+    let token = crypto.randomBytes(8).toString('hex');
+    req.body.code = token;
+    req.body.offerAmount = +req.body.offerAmount;
+    req.body.minPurchase = +req.body.minPurchase;
+
+
+    adminHelpers.addCoupons(req.body);
+    let coupons = await adminHelpers.getCoupons();
+    res.render("admin/coupons", {coupons})
   }
 
 };

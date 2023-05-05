@@ -4,9 +4,7 @@ const userController = require("../controllers/userControllers");
 const pageController = require("../controllers/pageControllers");
 const productController = require("../controllers/productControllers");
 const middleware = require("../middleware/loginmiddleware");
-const cartControllers = require("../controllers/cartControllers");
-const userHelper = require("../helpers/userHelper");
-const productHelper = require("../helpers/productHelper");
+const cartControllers = require("../controllers/cartControllers"); 
 const adminHelper = require("../helpers/adminHelper");
 
 
@@ -71,6 +69,7 @@ router.delete("/delete-cart-item", cartControllers.deleteCartItem);
 router.get('/add-address', userController.addAddress)
 router.put('/add-address/:id', userController.storeAddress)
 
+router.get('/orders', middleware.verifyLoggin, userController.orders_get);
 
 router.get('/order-success', userController.orderSuccess)
 
@@ -79,6 +78,15 @@ router.post('/orders/razorpay-success', cartControllers.orderSuccess)
 router.post('/verify-payment', userController.verifyPayment);
 router.get("/manage-addresses", middleware.verifyLoggin, userController.showAddresses);
 
-router.patch('/cancel-order/:id',middleware.verifyLoggin, userController.userCancelOrder)
+router.get('/cancel-order/:id',middleware.verifyLoggin, userController.userCancelOrder)
 
+router.get('/return-order/:id', async(req, res) => {
+  let order = await adminHelper.orderDetails(req.params.id)
+    adminHelper.returnOrder(req.params.id).then((response) => {
+    if(order[0].status === "Delivered" && order.paymentMethod !== "COD"){
+      adminHelper.returnMoney(order[0].userId, order[0].total)
+    }
+    res.redirect('/orders')
+  })
+})
 module.exports = router;

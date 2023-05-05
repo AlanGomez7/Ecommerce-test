@@ -13,6 +13,9 @@ var instance = new Razorpay({
 
 module.exports = {
     doSignup:(userData)=>{
+        console.log(userData);
+        let amount = 0;
+        userData.wallet = +amount
         userData.isAllowed = true;
         return new Promise(async(resolve, reject)=>{
 
@@ -181,8 +184,9 @@ module.exports = {
         console.log(order)
         return new Promise((resolve, reject)=>{
             let status = user.paymentmethod == 'COD' ? 'Placed': 'Pending';
+            
             let orderObj={
-                orderId: crypto.randomUUID(),
+                orderId: crypto.randomBytes(8).toString('hex'),
                 deliveryDetails: {
                     username: order.username,
                     address: order.address,
@@ -196,7 +200,7 @@ module.exports = {
                 products: products,
                 paymentMethod: user.paymentmethod ,
                 status: status,
-                total: total,
+                total: parseInt(total),
                 date: new Date()
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
@@ -284,7 +288,6 @@ module.exports = {
               });
         })
     },
-
 
     verifyPayment: (details)=>{
         return new Promise((resolve, reject)=>{

@@ -51,8 +51,9 @@ module.exports = {
       if(cartProducts.length > 0){
         var address = await userHelpers.getAddress(req.body.userId)
         var total = await userHelpers.getTotalAmount(req.body.userId);
-        userHelpers.placeOrder(address[req.body.selectedaddress], cartProducts, total[0].total, req.body).then((response) => {
+        userHelpers.placeOrder(address[req.body.selectedaddress], cartProducts, req.body.orderTotal, req.body).then((response) => {
           req.session.currentOrder = response.insertedId;
+
           if(req.body.paymentmethod === 'COD'){
            res.send({codSuccess: true})
           }else{
@@ -60,6 +61,7 @@ module.exports = {
               res.json(response)
             })
           }
+
         });
       }else{
         console.log('cart is empty')
@@ -100,15 +102,17 @@ module.exports = {
   },
 
   orderSuccess: async(req, res, err) =>{
+    console.log(req.body);
     if(!req.body.razorpay_signature){
       res.redirect('/chekout')
     }else{
-      console.log(req.session.user._id)
       userHelpers.deleteCart(req.session.user._id)
-      
       let order = await adminHelpers.orderDetails(req.session.currentOrder);
       let products = await adminHelpers.getOrderProducts(req.session.currentOrder);
-      console.log(products)
+      console.log(order)
+      userHelpers.changeStatus(order[0]._id).then(res=>{
+        
+      })
       res.render('users/order-confirmed', {order, products})
     }
   }

@@ -52,14 +52,15 @@
               <div class="p-3 p-lg-5 border">
 
                 <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+                <label for="c_code" id="message" class="text-danger mb-3" style="display: none;">Invalid coupon </label>
+
                 <div class="input-group w-75">
                   <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
                     aria-describedby="button-addon2">
                   <div class="input-group-append">
-                    <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
+                    <button class="btn btn-primary btn-sm" type="button" id="coupon-apply" onclick="addCoupon()">Apply</button>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -92,21 +93,19 @@
                       <td>Polo Shirt <strong class="mx-2">x</strong> 1</td>
                       <td>$100.00</td>
                     </tr>
-                    <tr>
-                      <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                      <td class="text-black">$<%= total %>
-                      </td>
-                    </tr>
+                    
                     <tr>
                       <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                      <td class="text-black font-weight-bold"><strong>$<%=total%></strong></td>
+                      <td class="text-black font-weight-bold" id="total"><strong>$<%=total%></strong></td>
                     </tr>
                   </tbody>
+
+                  <input  name="orderTotal" id="orderTotal" value="<%=total%>" hidden>
+                
                 </table>
                 <div class="form-group">
                   <button class="btn btn-primary btn-lg py-3 btn-block" type="submit" onclick="checkOut()">Place Order</button>
                 </div>
-
               </div>
             </div>
           </div>
@@ -114,8 +113,6 @@
         </div>
       </div>
       </form>
-
-      
     </div>
   </div>
 
@@ -168,7 +165,6 @@
               <li class="email">emailaddress@domain.com</li>
             </ul>
           </div>
-  
           <div class="block-7">
             <form action="#" method="post">
               <label for="email_subscribe" class="footer-heading">Subscribe</label>
@@ -207,6 +203,24 @@
   <script src="/js/main1.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
+
+    function addCoupon(){
+      let code = document.getElementById("c_code").value
+      fetch('/admin/verify-coupon/' + code, {
+        method:'GET'
+      })
+      .then(r => r.json())
+      .then((response)=>{
+        if(response.message){
+          document.getElementById('message').style.display = 'block'
+        }else if(response.status){
+          let total = '<%=total%>' - response.offerAmount;
+          document.getElementById('total').innerHTML = "$" +total
+          document.getElementById('orderTotal').value = +total
+        } 
+      })
+    }
+
     function checkOut() {
       let form = document.getElementById('checkout-form');
       form.addEventListener('submit', event => {
@@ -262,6 +276,7 @@
     
 
     function verifyPayment(payment, order){
+      console.log("verification")
       fetch('/verify-payment', {
         method: "POST",
         body: JSON.stringify({

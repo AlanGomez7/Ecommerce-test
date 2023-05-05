@@ -98,6 +98,15 @@ module.exports = {
 
     getAllOrders: ()=>{
         return new Promise ((resolve, reject) => {
+            let orders = db.get().collection(collection.ORDER_COLLECTION).aggregate([
+
+            ])
+            resolve(orders)  
+        })
+    },
+
+    getOrderTotals : ()=>{
+        return new Promise ((resolve, reject) => {
             let orders = db.get().collection(collection.ORDER_COLLECTION).find().toArray()
             resolve(orders)  
         })
@@ -151,7 +160,7 @@ module.exports = {
     orderDetails: (Id)=>{
         return new Promise (async(resolve, reject) => {
             let order = await db.get().collection(collection.ORDER_COLLECTION).find({_id: ObjectId(Id)}).toArray()
-            resolve(order)  
+            resolve(order)
         })
     },
     
@@ -160,6 +169,28 @@ module.exports = {
             await db.get().collection(collection.ORDER_COLLECTION).updateOne({_id: ObjectId(orderId)}, {
                 $set: {
                     status: 'cancelled'
+                }
+            })
+            resolve()  
+        })
+    },
+
+    returnOrder: (orderId)=>{
+        return new Promise (async(resolve, reject) => {
+            await db.get().collection(collection.ORDER_COLLECTION).updateOne({_id: ObjectId(orderId)}, {
+                $set: {
+                    status: 'Returned'
+                }
+            })
+            resolve()  
+        })
+    },
+
+    deliveredOrder: (orderId)=>{
+        return new Promise (async(resolve, reject) => {
+            await db.get().collection(collection.ORDER_COLLECTION).updateOne({_id: ObjectId(orderId)}, {
+                $set: {
+                    status: 'Delivered'
                 }
             })
             resolve()  
@@ -213,5 +244,97 @@ module.exports = {
             });
         })
     },
+
+    addCoupons: (coupons) => {
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).insertOne(coupons).then((response)=>{
+                resolve(response)
+            });
+        })
+    },
+    getCoupons: ()=>{
+        return new Promise ((resolve, reject) => {
+            let coupons = db.get().collection(collection.COUPON_COLLECTION).find().toArray()
+            resolve(coupons)  
+        })
+    },
+    verfiyCoupon: (code)=>{
+        code = ""+code
+        return new Promise ((resolve, reject) => {
+            let coupons = db.get().collection(collection.COUPON_COLLECTION).findOne({code: code})
+            resolve(coupons)  
+        })
+    },
+    userOrderedProducts: (userId) => {
+        return new Promise(async (resolve, reject) => {
+          let orderItems = await db
+            .get()
+            .collection(collection.ORDER_COLLECTION)
+            .aggregate([
+              {
+                $match: {userId: ObjectId(userId) },
+              },
+              {
+                $unwind: '$products',
+              },
+              {
+                $project: {
+                  item: '$products.item',
+                  quantity: '$products.quantity',
+                },
+              },
+              {
+                $lookup: {
+                  from: collection.PRODUCT_COLLECTION,
+                  localField: 'item',
+                  foreignField: '_id',
+                  as: 'product',
+                },
+              },
+              {
+                $project:{
+                  item:1, quantity:1, status: 1, product: {$arrayElemAt: ['$product', 0]}
+                }
+              }
+            ])
+            .toArray();
+           
+          resolve(orderItems);
+        });
+    },
+
+    returnMoney:(userId,userDetails)=>{
+        console.log('returnMoney', userId, userDetails)
+        userDetails = +userDetails;
+        return new Promise((resolve,reject)=>{
+            // productDetails.price=parseInt(productDetails.price)
+            db.get().collection(collection.USER_COLLECTION)
+            .updateOne({_id:ObjectId(userId)},{
+                $inc:{
+                    wallet : userDetails
+                },
+            },
+            {upsert: true})
+            .then(()=>{
+                resolve()
+            })
+        })
+    },
+    totalOrderAmount:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let amount = await db.get().collection(collection.ORDER_COLLECTION).aggregate([ 
+                { $match: { status: "Delivered" } },
+                { $group: 
+                    { 
+                        _id: "", TotalSum: { $sum: "$total" } 
+                    } 
+                } 
+            ]).toArray()
+            resolve(amount)
+        })
+        
+    }
+
+   
     
 }

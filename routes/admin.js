@@ -83,5 +83,23 @@ router.get("/orders", middleware.verifyAdmin,adminController.getOrder);
 
 router.get("/order-details/:id",middleware.verifyAdmin,adminController.orderDetails)
 
-router.get('/cancel-order/:id',middleware.verifyAdmin, adminController.adminCancelOrder)
+router.patch('/cancel-order/:id',middleware.verifyAdmin, adminController.adminCancelOrder)
+router.patch('/delivered-order/:id', middleware.verifyAdmin, adminController.deliveredOrder)
+
+router.get('/coupons', adminController.getCoupons)
+router.post('/create-code', adminController.createCode)
+
+router.get('/verify-coupon/:id', async(req, res)=>{
+  let coupon = await adminHelper.verfiyCoupon(req.params.id)
+
+  if(coupon == null){
+    res.json({message: 'Invalid coupon'})
+  }else{
+    if(coupon.active){
+      res.json({status: true, offerAmount: coupon.offerAmount})
+    }else{
+      res.json({status: false})
+    }
+  }
+})
 module.exports = router;
