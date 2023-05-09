@@ -181,7 +181,7 @@ module.exports = {
     },
     
     placeOrder: (order, products, total, user)=>{
-        console.log(order)
+        console.log(user.paymentMethod)
         return new Promise((resolve, reject)=>{
             let status = user.paymentmethod == 'COD' ? 'Placed': 'Pending';
             
@@ -289,7 +289,7 @@ module.exports = {
         })
     },
 
-    verifyPayment: (details)=>{
+     verifyPayment: (details)=>{
         return new Promise((resolve, reject)=>{
             const crypto = require('crypto');
             let hmac = crypto.createHmac('sha256', 'Otf2FtyERzKpwAk9DY2OrGLp')

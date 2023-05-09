@@ -69,7 +69,7 @@ router.get('/delete-banner/:id', adminController.deleteBanner)
 router
   .route("/edit-product/:id", middleware.adminLoggedIn)
   .get(productController.editProduct)
-  .post(productController.postEditProducts);
+  .post(upload.array("Image"), productController.postEditProducts);
 
 router.get("/add-category",middleware.verifyAdmin, adminController.addCategory_get)
 
@@ -88,6 +88,8 @@ router.patch('/delivered-order/:id', middleware.verifyAdmin, adminController.del
 
 router.get('/coupons', adminController.getCoupons)
 router.post('/create-code', adminController.createCode)
+router.patch('/list-coupon/:id', adminController.listCoupon)
+router.patch('/unlist-coupon/:id', adminController.unlistCoupon)
 
 router.get('/verify-coupon/:id', async(req, res)=>{
   let coupon = await adminHelper.verfiyCoupon(req.params.id)
@@ -95,11 +97,13 @@ router.get('/verify-coupon/:id', async(req, res)=>{
   if(coupon == null){
     res.json({message: 'Invalid coupon'})
   }else{
-    if(coupon.active){
+    if(coupon.isListed){
       res.json({status: true, offerAmount: coupon.offerAmount})
     }else{
-      res.json({status: false})
+      res.json({status: false, message: 'Expired coupon'})
     }
   }
 })
+
+router.get('/download-invoice/:id', adminController.downloadInvoice)
 module.exports = router;

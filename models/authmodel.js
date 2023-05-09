@@ -13,7 +13,13 @@ const SignupSchema = Joi.object({
   isAllowed: Joi.bool().required
 })
 
+const updatePasswordSchema = Joi.object({
+  password: Joi.string().min(8).required(),
+  confirmPassword: Joi.any().valid(Joi.ref('password')).required()
+})
+
 module.exports = {
   LoginAuthSchema,
-  SignupSchema
+  SignupSchema,
+  updatePasswordSchema
 };

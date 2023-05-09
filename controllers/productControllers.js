@@ -23,10 +23,27 @@ module.exports = {
   },
 
   postEditProducts: async (req, res) => {
-    req.body.price = +req.body.price;
+    console.log(req.body.price)
+   try{
+    const imgUrl = [];
+    for (let i = 0; i <req.files.length; i++) {
+      const result = await cloudinary.uploader.upload(req.files[i].path);
+      imgUrl.push(result.url);
+      console.log(result.url);
+    }
     productHelpers.updateProducts(req.params.id, req.body).then(() => {
-      res.redirect('/admin/view-product');
-    });
+      if(imgUrl.length != 0) {
+        productHelpers.addProductImages(req.params.id, imgUrl).then((response)=>{
+          console.log(response)
+        })
+      }
+    })
+
+   }catch(err){
+    console.log(err);
+   }finally{
+    res.redirect('/admin/view-product');
+   }
   },
 
   AddProductFunc: (req, res) => {
@@ -36,7 +53,6 @@ module.exports = {
   },
 
   postAddProduct: async (req, res) => {
-    console.log(req.body, "LLLLLLLLLL")
     
     try {
       req.body.stock = +req.body.stock;

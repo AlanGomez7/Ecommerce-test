@@ -39,9 +39,16 @@
                     </td>
                     <td>
                       <div class="input-group mb-3" style="max-width: 120px;">
-                        <div class="input-group-prepend">
-                          <button class="btn btn-outline-primary js-btn-minus" id="myBtn" type="button" onclick="changeQuantity('<%= products._id%>', '<%= products.product._id%>', '<%=user._id%>', -1)">&minus;</button>
-                        </div>
+                        <%if(products.quantity == 1){%>
+                          
+                          <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary js-btn-minus material-icons" id="myBtn" type="button" onclick="deleteCartItem('<%= products._id%>', '<%= products.product._id%>')">delete</button>
+                          </div>
+                        <%}else{%>
+                          <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary js-btn-minus" id="myBtn" type="button" onclick="changeQuantity('<%= products._id%>', '<%= products.product._id%>', '<%=user._id%>', -1)">&minus;</button>
+                          </div>
+                        <%}%>
                         <input type="text" class="form-control text-center" id="<%= products.product._id%>" value="<%=products.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                         <div class="input-group-append">
                           <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="changeQuantity('<%= products._id%>', '<%= products.product._id%>', '<%=user._id%>', 1)">&plus;</button>
@@ -50,7 +57,8 @@
                     </td>
                     <td>$<%=products.product.price %></td>
                     <td>
-                      <button class="btn btn-primary btn-sm text-light" id="delete-cart" type="button"onclick="deleteCartItem('<%= products._id%>', '<%= products.product._id%>')">x</button>
+                      <button class="btn btn-outline-primary js-btn-minus material-icons" id="myBtn" type="button" onclick="deleteCartItem('<%= products._id%>', '<%= products.product._id%>')">delete</button>
+
                     </td>
                 </tr>
                  <%})%>

@@ -52,11 +52,7 @@ function ValidateEmail(inputText){
 
       document.getElementById('emailAlert').style.display = "none"
       document.getElementById("submitBtn").disabled = false;
-
-      
-      // document.form1.email.focus();
     }
-
 }
 
 function validatePassword(inputText){
@@ -79,23 +75,6 @@ function validatePassword(inputText){
   } 
 }
 
-function addToCart(id) {
-  let count = document.getElementById('cart-count').innerText;
-  let url = '/add-to-cart/' + id;
-  fetch(url, {
-    method: 'GET'
-  }).then((res)=>{
-    if(res.status === 200) {
-      // console.log(count, "|||||||||||||||||||||||||||||")
-    let count = document.getElementById('cart-count').innerText;
-      let numericalCount = +count + 1
-      document.getElementById('cart-count').innerText = numericalCount 
-      
-    }else{
-      location.assign('users/login')
-    }
-  })
-}
 
 
 

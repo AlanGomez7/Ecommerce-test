@@ -2,7 +2,6 @@ const userHelpers = require("../helpers/userHelper");
 const productHelpers = require('../helpers/productHelper');
 const adminHelpers = require('../helpers/adminHelper');
 const createHttpError = require("http-errors");
-
 var cartCount = 0
 
 module.exports = {
@@ -81,7 +80,7 @@ module.exports = {
 
   cart: async (req, res) => {
     if (req.session.userLoggedIn) {
-      console.log(req.session.userLoggedIn)
+      cartCount = await userHelpers.getCartCount(req.session.user._id);
       let products = await productHelpers.getCartProducts(req.session.user._id);
       if(products.length == 0) {
         res.render('users/emptycart')

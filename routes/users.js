@@ -70,9 +70,7 @@ router.get('/add-address', userController.addAddress)
 router.put('/add-address/:id', userController.storeAddress)
 
 router.get('/orders', middleware.verifyLoggin, userController.orders_get);
-
 router.get('/order-success', userController.orderSuccess)
-
 router.post('/orders/razorpay-success', cartControllers.orderSuccess)
 
 router.post('/verify-payment', userController.verifyPayment);

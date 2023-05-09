@@ -203,7 +203,6 @@
   <script src="/js/main1.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-
     function addCoupon(){
       let code = document.getElementById("c_code").value
       fetch('/admin/verify-coupon/' + code, {

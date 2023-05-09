@@ -117,27 +117,38 @@ module.exports = {
         throw createError.NotFound("user not found");
       req.session.mobile = user.mobile;
       resetPasswordAuth.sendOtp(req.session.mobile);
-      res.render("users/enter-otp", { otpLogin: true });
+      res.render("users/enter-otp", { otpLogin: true, wrongOtp: "" });
     } catch (error) {
       res.send({
         error: {
-          status: "error.status",
+          status: error.status,
           message: error.message,
         },
       });
     }
   },
 
-  submitOtpLogin: async (req, res) => {
-    console.log(req.session.mobile);
-    let user = await userHelpers.getUserByMobile(req.session.mobile);
-    req.session.user = user;
-    let result = await resetPasswordAuth.verifyOtp(
-      req.session.mobile,
-      req.body.otp
-    );
-    if (!result) throw createHttpError.BadRequest("Wrong otp");
-    else res.redirect("/");
+   submitOtpLogin: async (req, res) => {
+    try{
+      console.log(req.session.mobile);
+      let result = await resetPasswordAuth.verifyOtp(
+        req.session.mobile,
+        req.body.otp
+      );
+      console.log(result, 'result+++++++++')
+      if (!result){
+        throw createHttpError.BadRequest("Wrong otp");
+      }else{
+        req.session.userLoggedIn = true;
+        let user = await userHelpers.getUserByMobile(req.session.mobile);
+        req.session.user = user;
+        res.redirect("/");
+      } 
+      
+    }catch(e){
+      req.session.wrongOtp = e.message
+      res.redirect("/otp-login");
+    }
   },
 
   addAddress: async (req, res) => {

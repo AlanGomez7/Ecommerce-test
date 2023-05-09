@@ -1,10 +1,9 @@
 var db = require('../config/connection');
-const mongoose = require('mongoose');
 var collection = require('../config/collection');
+const ObjectId = require('mongodb').ObjectId;
 const { image } = require('../utils/cloundinary');
 const { response } = require('express');
 const { Collection } = require('mongodb');
-const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
   addProducts: (product, callback) => {
@@ -158,13 +157,14 @@ module.exports = {
     });
   },
 
-  updateProducts: (ProId, productDetails) => {
+  updateProducts: (proId, productDetails) => {
+    console.log(productDetails.price)
     return new Promise((resolve, reject) => {
-      // productDetails.price=parseInt(productDetails.price)
+      productDetails.price=parseInt(productDetails.price)
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
         .updateOne(
-          { _id: ObjectId(ProId) },
+          { _id: ObjectId(proId) },
           {
             $set: {
               title: productDetails.title,

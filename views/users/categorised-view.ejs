@@ -20,20 +20,7 @@
                 <div class="d-flex">
                   <div class="dropdown mr-1 ml-md-auto">
                   </div>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuReference" data-toggle="dropdown">Sort By</button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                    
-                      <a class="dropdown-item" href="#">Name, A to Z</a>
-                      <a class="dropdown-item" href="#">Name, Z to A</a>
-                      <a class="dropdown-item" href="#">Price low to high</a>
-                      <a class="dropdown-item" href="#">price High to low</a>
-
-                      <div class="dropdown-divider">Filters</div>
-                      <a class="dropdown-item" href="#"></a>
-                      <a class="dropdown-item" href="#"></a>
-                    </div>
-                  </div>
+                   
                 </div>
               </div>
             </div>
@@ -41,7 +28,7 @@
 
               <%for(let i = 0; i < result.length; i++){%>
                 
-                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                <div class="col-sm-6 col-lg-4 mb-4 product-cards" data-aos="fade-up" data-price="<%=result[i].price%>">
                   <div class="block-4 text-center border">
                     <figure class="block-4-image"> 
                       <a href="/product-details/<%= result[i]._id %>"><img loading="lazy" src= <%= result[i].image %> alt="Image placeholder" class="img-fluid w-100 h-75"></a>
@@ -71,7 +58,30 @@
                 <%}%>
                 </ul>
             </div>
+            <div class="border p-4 rounded mb-4">
+              <h4>Filter By Price</h4>
+              <input
+                type="number"
+                placeholder=""
+                name="minamount"
+                id="minamount"
+                class="mb-3 rounded border-0 bg-light pl-5 w-75"
+                value="30"
+                onchange="onchangeHandler(event)"
+              />
+              <input
+                type="number"
+                placeholder=""
+                name="maxmount"
+                id="maxamount"
+                class="mb-3 rounded border-0 bg-light pl-5 w-75"
+                value="200"
+                onchange="onchangeHandler(event)"
+              />
+            </div>
           </div>
+          
+          
         </div>        
       </div>
     </div>
