@@ -20,7 +20,7 @@
           <form id="checkout-form">
             <div class="p-3 p-lg-5 border">
 
-             
+              <p class="text-danger" style="display: none" id="addressmsg">Select or Add an Address</p>             
               <%if(hasAddress){%>
                 <%for(let i=0; i < address.length; i++){%>
                   <div class="card mb-3">
@@ -74,6 +74,11 @@
           <div class="border p-3 mb-3">
             <h3 class="h6 mb-0"><a class="d-block" role="button">
               <input type="radio" name="paymentmethod" value="COD" class="mr-3">   Cash On Delivery</a></h3>
+          </div>
+          <h4 class="text-danger" id="walletmsg" style="display: none;">Not enough Balance</h4>
+          <div class="border p-3 mb-3">
+            <h3 class="h6 mb-0"><a class="d-block" role="button">
+              <input type="radio" name="paymentmethod" value="wallet" class="mr-3">   Wallet</a></h3>
           </div>
           <div class="row mb-5">
             <div class="col-md-12">
@@ -235,8 +240,16 @@
         .then(response => {
           if(response.codSuccess){
             location.href = '/order-success'
-          }else{
+          }else if(response.walletSuccess){
+            console.log(response)
+            location.href= '/order-success'
+          }else if(response.onlinepayment){
+            console.log(response)
             razorPayment(response)
+          }else if(response.error){
+            document.getElementById('addressmsg').style.display = "block"
+          }else{
+            document.getElementById('walletmsg').style.display = "block"
           }
         }) 
       })

@@ -26,7 +26,7 @@
           <div class="col-sm-6 col-lg-4 mb-4 product-cards" data-aos="fade-up" data-price="<%=products.price%>">
             <div class="block-4 text-center border">
               <figure class="block-4-image">
-                <a href="/product-details/<%= products._id%>"
+                <a href="/product-details/<%= products.uniqueId%>"
                   ><img
                     src="<%= products.image%>"
                     alt="Image placeholder"
@@ -35,7 +35,7 @@
               </figure>
               <div class="block-4-text p-4">
                 <h3>
-                  <a href="/product-details/<%= products._id%>"
+                  <a href="/product-details/<%= products.uniqueId%>"
                     ><%= products.title%></a
                   >
                 </h3>
@@ -54,7 +54,7 @@
           </div>
           <%})%>
         </div>
-        <div class="row" data-aos="fade-up">
+        <!-- <div class="row" data-aos="fade-up">
           <div class="col-md-12 text-center">
             <div class="site-block-27">
               <ul>
@@ -68,9 +68,8 @@
               </ul>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-
       <div class="col-md-3 order-1 mb-5 mb-md-0">
         <div class="border p-4 rounded mb-4">
           <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
@@ -90,7 +89,7 @@
           <h4>Filter By Price</h4>
           <input
             type="number"
-            placeholder=""
+            placeholder="$"
             name="minamount"
             id="minamount"
             class="mb-3 rounded border-0 bg-light pl-5 w-75"
@@ -99,7 +98,7 @@
           />
           <input
             type="number"
-            placeholder=""
+            placeholder="$"
             name="maxmount"
             id="maxamount"
             class="mb-3 rounded border-0 bg-light pl-5 w-75"

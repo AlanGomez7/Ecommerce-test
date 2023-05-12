@@ -62,7 +62,7 @@ router.post("/otp-login", userController.otpLogin_post);
 router.route("/update-password").post(pageController.updatePassword_post);
 
 router.get("/checkout",middleware.verifyLoggin, cartControllers.checkout_get);
-router.post("/checkout", cartControllers.checkout_post);
+router.post("/checkout",middleware.verifyLoggin, cartControllers.checkout_post);
 
 router.delete("/delete-cart-item", cartControllers.deleteCartItem);
 
@@ -70,21 +70,15 @@ router.get('/add-address', userController.addAddress)
 router.put('/add-address/:id', userController.storeAddress)
 
 router.get('/orders', middleware.verifyLoggin, userController.orders_get);
-router.get('/order-success', userController.orderSuccess)
-router.post('/orders/razorpay-success', cartControllers.orderSuccess)
+router.get('/order-success', middleware.verifyLoggin, userController.orderSuccess)
+router.post('/orders/razorpay-success',middleware.verifyLoggin, cartControllers.orderSuccess)
 
 router.post('/verify-payment', userController.verifyPayment);
 router.get("/manage-addresses", middleware.verifyLoggin, userController.showAddresses);
 
 router.get('/cancel-order/:id',middleware.verifyLoggin, userController.userCancelOrder)
 
-router.get('/return-order/:id', async(req, res) => {
-  let order = await adminHelper.orderDetails(req.params.id)
-    adminHelper.returnOrder(req.params.id).then((response) => {
-    if(order[0].status === "Delivered" && order.paymentMethod !== "COD"){
-      adminHelper.returnMoney(order[0].userId, order[0].total)
-    }
-    res.redirect('/orders')
-  })
-})
+router.get('/return-order/:id', middleware.verifyLoggin, userController.returnOrder)
+
+router.get('/search-item/', userController.search)
 module.exports = router;

@@ -19,17 +19,19 @@
                     <th class="product-name">Product</th>
                     <th class="product-price">Price</th>
                     <th class="product-quantity">Quantity</th>
-                    <th class="product-total">Total</th>
+                    <!-- <th class="product-total">Total</th> -->
                     <th class="product-remove">Remove</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <p><%=isInStock%></p>
                  <% products.forEach((products)=>{%>
                   <tr>
                     <td class="product-thumbnail">
                       <img src="<%=products.product.image %>" alt="Image" class="img-fluid">
                       <%if(products.product.stock == 0){%>
                         <p class="mb-0 text-danger h5">Out of stock</p>
+
                       <%}%>
                     </td>
                     <td class="product-name">
@@ -40,7 +42,6 @@
                     <td>
                       <div class="input-group mb-3" style="max-width: 120px;">
                         <%if(products.quantity == 1){%>
-                          
                           <div class="input-group-prepend">
                             <button class="btn btn-outline-primary js-btn-minus material-icons" id="myBtn" type="button" onclick="deleteCartItem('<%= products._id%>', '<%= products.product._id%>')">delete</button>
                           </div>
@@ -55,7 +56,7 @@
                         </div>
                       </div>
                     </td>
-                    <td>$<%=products.product.price %></td>
+                    <!-- <td id="countTotal">$<%=products.product.price%></td> -->
                     <td>
                       <button class="btn btn-outline-primary js-btn-minus material-icons" id="myBtn" type="button" onclick="deleteCartItem('<%= products._id%>', '<%= products.product._id%>')">delete</button>
 
@@ -69,25 +70,6 @@
           </form>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <div class="row mb-5">
-              <div class="col-md-6">
-                <a class="btn btn-outline-primary btn-sm btn-block" href="/shop">Continue Shopping</a>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <label class="text-black h4" for="coupon">Coupon</label>
-                <p>Enter your coupon code if you have one.</p>
-              </div>
-              <div class="col-md-8 mb-3 mb-md-0">
-                <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-              </div>
-              <div class="col-md-4">
-                <button class="btn btn-primary btn-sm">Apply Coupon</button>
-              </div>
-            </div>
-          </div>
           <div class="col-md-6 pl-5">
             <div class="row justify-content-end">
               <div class="col-md-7">
@@ -104,11 +86,16 @@
                     <strong class="text-black h2">$<span id="total"><%= total%></span></strong>
                   </div>
                 </div>
-
                 <div class="row">
-                  <div class="col-md-12">
-                    <a class="btn btn-primary btn-lg py-3 btn-block mt-4" href="/checkout">Proceed To Checkout</a>
-                  </div>
+                  <%if(!isInStock){%>
+                    <div class="col-md-12">
+                      <a class="btn btn-primary btn-lg py-3 btn-block mt-4 disabled" id="checkout_Btn" href="/checkout" style="color: white">Proceed To Checkout</a>
+                    </div>
+                  <%}else{%>
+                    <div class="col-md-12">
+                      <a class="btn btn-primary btn-lg py-3 btn-block mt-4" id="checkout_Btn" href="/checkout" style="color: white">Proceed To Checkout</a>
+                    </div>
+                  <%}%>
                 </div>
               </div>
             </div>

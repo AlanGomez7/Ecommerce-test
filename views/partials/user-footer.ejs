@@ -125,6 +125,7 @@
       let quantity = document.getElementById(proId).value;
      
       let updatedQuantity = +quantity + count;
+      console.log(updatedQuantity);
       document.getElementById(proId).value = updatedQuantity
       let res = await response.json()
       document.getElementById('total').innerHTML = res.total
@@ -133,6 +134,9 @@
         location.reload()
       }
 
+      // let price = document.getElementById('countTotal').innerHTML;
+      
+      // document.getElementById('countTotal').innerHTML = "$"+parseInt(price.slice(1) * updatedQuantity)
     })
   }
 

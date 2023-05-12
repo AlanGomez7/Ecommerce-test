@@ -35,13 +35,13 @@
                                 <td class="img-sm img-thumbnail"><img src="<%= products.image%>"></td>
                                 <td><b><%= products.title%></b></td>
                                 
-                                <td>$<%= products.description%></td>
+                                <td><%= products.description%></td>
                                 <td><span class=""><%=products.stock%></span></td>
                                 <td><span class="badge rounded-pill alert-warning"><%=products.price%></span></td>
 
                                 <td class="text-end d-flex">
-                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                        <a href="/admin/edit-product/<%= products._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end d-flex">
+                                        <a href="/admin/edit-product/<%= products._id %>" class="btn btn-sm font-sm rounded btn-brand mr-5">
                                             <i class="material-icons md-edit"></i> Edit
                                         </a>
                                         

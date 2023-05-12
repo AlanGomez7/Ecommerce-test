@@ -283,18 +283,16 @@ const grantAccess = () => {
 function addToCart(id) {
 	let url = '/add-to-cart/' + id;
 	fetch(url, {
-	  method: 'GET'
-	}).then(r => r.json())
+	  method: 'GET',
+	  
+	}).then(response => response.json())
 	.then((res)=>{
 	  if(res.status) {
-		console.log(res.status)
 		// console.log(count, "|||||||||||||||||||||||||||||")
 	  let count = document.getElementById('cart-count').innerText;
 		let numericalCount = +count + 1
 		document.getElementById('cart-count').innerText = numericalCount 
 	  }else if(!res.status){
-		console.log(res.status)
-		
 		location.href='/login'
 	  }
 	})

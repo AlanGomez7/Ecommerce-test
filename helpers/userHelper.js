@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const Razorpay = require('razorpay');
 const { resolve } = require('path');
 const crypto = require("crypto");
+const { object } = require('joi');
 var instance = new Razorpay({
     key_id: 'rzp_test_bYaik8BIHFQdLC',
     key_secret: 'Otf2FtyERzKpwAk9DY2OrGLp',
@@ -181,9 +182,9 @@ module.exports = {
     },
     
     placeOrder: (order, products, total, user)=>{
-        console.log(user.paymentMethod)
+        console.log(user.paymentmethod)
         return new Promise((resolve, reject)=>{
-            let status = user.paymentmethod == 'COD' ? 'Placed': 'Pending';
+            let status = user.paymentmethod == 'COD' || 'wallet' ? 'Placed': 'Pending';
             
             let orderObj={
                 orderId: crypto.randomBytes(8).toString('hex'),
@@ -209,11 +210,24 @@ module.exports = {
         })
 
     },
+    walletPayment: (user,totalAmount)=>{
+        console.log(user.userId, totalAmount, "PPP")
+        let amount = +totalAmount
+        return new Promise(async(resolve, reject) => {
+          await db.get().collection(collection.USER_COLLECTION).updateOne({_id: ObjectId(user.userId)},{
+            $inc:{
+                wallet: -amount
+            }
+          })
+          resolve()
+        })
+      },
 
-    decreaseStock: (id)=>{
+    decreaseStock: (id, quantity)=>{
+        console.log(id, quantity)
         return new Promise(async(resolve, reject) => {
             let result = await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id: ObjectId(id)}, {
-                $inc: {stock: -1}
+                $inc: {stock: -quantity}
             })
             resolve(result)
         })
@@ -270,11 +284,10 @@ module.exports = {
         })
     },
 
-    generateRazorpay: (orderId, total)=>{
-        console.log(typeof total[0].total);
+     generateRazorpay: (orderId, total)=>{ 
         return new Promise((resolve, reject)=>{
             var options = {
-                amount: (total[0].total)*100,  // amount in the smallest currency unit
+                amount: (total)*100,  // amount in the smallest currency unit
                 currency: "INR",
                 receipt: ""+orderId
               };
@@ -303,6 +316,18 @@ module.exports = {
               }
         })
     },
+    changeStock : (productId)=>{
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({
+                _id: ObjectId(productId)
+            },
+            {  
+                stock: {$inc: -1}     
+            })
+        }).then((response)=>{
+            resolve()
+        })
+    },
 
     changeStatus: (orderId)=>{
         return new Promise((resolve, reject) => {
@@ -310,7 +335,7 @@ module.exports = {
                 _id: ObjectId(orderId)
             },
             {
-                $set:{
+                $set:{  
                   status: "Placed"  
                 }
             })

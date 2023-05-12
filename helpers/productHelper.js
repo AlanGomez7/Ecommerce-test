@@ -7,6 +7,7 @@ const { Collection } = require('mongodb');
 
 module.exports = {
   addProducts: (product, callback) => {
+    
     product.isListed = true;
     db.get()
       .collection(collection.PRODUCT_COLLECTION)
@@ -156,6 +157,16 @@ module.exports = {
         });
     });
   },
+  getSingleProduct: (uniqueId)=>{
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .findOne({ uniqueId:uniqueId })
+        .then((product) => {
+          resolve(product);
+        });
+    });
+  },
 
   updateProducts: (proId, productDetails) => {
     console.log(productDetails.price)
@@ -285,4 +296,16 @@ module.exports = {
       resolve(categoryDetails);
     });
   },
+  searchProducts: (search) => {
+    return new Promise(async(resolve, reject) => {
+      let result = await db.get().collection(collection.PRODUCT_COLLECTION).find(
+        {$or:
+          [
+            {title: {$regex: search, $options: "i"}}
+          ]
+        }
+      ).toArray();
+      resolve(result)
+    });
+  }
 };

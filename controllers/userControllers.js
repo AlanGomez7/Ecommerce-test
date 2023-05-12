@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const resetPasswordAuth = require("../utils/twilio");
 const { use } = require("../routes/users");
 let crypto = require("crypto");
+let adminHelper = require("../helpers/adminHelper");
 const productHelper = require("../helpers/productHelper");
 const maxAge = 3 * 24 * 60 * 60;
 let cartCount = 0;
@@ -218,12 +219,31 @@ module.exports = {
     userHelpers.deleteCart(req.session.user._id)
     res.render('users/order-confirmed', {order, products})
   },
+  
   orders_get: async(req, res) => {
     let products = await adminHelpers.userOrderedProducts(req.session.user._id);
     let order = await adminHelpers.getOrderDetails(req.session.user._id);
 
     console.log(products)
     res.render('users/orders', {products, order})
+  },
+
+  search : async(req, res) => {
+    let category = await adminHelper.getCategories();
+    let products = await productHelper.searchProducts(req.query.search);
+    
+    res.render('users/shop', {products, category, cartCount, user: req.session.user } )
+  },
+
+  returnOrder: async(req, res) => {
+    let order = await adminHelper.orderDetails(req.params.id)
+      adminHelper.returnOrder(req.params.id).then((response) => {
+      if(order[0].status === "Delivered" && order.paymentMethod !== "COD"){
+        adminHelper.returnMoney(order[0].userId, order[0].total)
+      }
+      res.redirect('/orders')
+    })
   }
+
 };
  

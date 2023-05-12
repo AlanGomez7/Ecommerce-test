@@ -6,11 +6,13 @@ const cloudinary = require('../utils/cloundinary');
 const upload = require('../utils/multer');
 const { response } = require('express');
 var objectId = require('mongodb').ObjectId;
+const crypto = require('crypto');
 
 module.exports = {
+  
   productDetails: async (req, res) => {
     console.log(req.session.user)
-    let product = await productHelpers.getProductDetails(req.params.id);
+    let product = await productHelpers.   getSingleProduct(req.params.id);
     console.log(product);
     res.render('users/product-details', { product, user: req.session.user, cartCount: req.session.cartCount });
   },
@@ -57,6 +59,7 @@ module.exports = {
     try {
       req.body.stock = +req.body.stock;
       req.body.price = +req.body.price;
+      req.body.uniqueId = crypto.randomBytes(8).toString('hex')
       
 
       const imgUrl = [];

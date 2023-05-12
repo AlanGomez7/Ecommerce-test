@@ -8,7 +8,7 @@ let cartCount = 0;
 module.exports = {
   // landing Page function.
   landingPage: async (req, res) => {
-    let homeBanner; 
+    let homeBanner;
     let user = req.session.user;
     let banners = await adminHelper.getBanners()
     if (req.session.user) {
