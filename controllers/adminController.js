@@ -22,6 +22,18 @@ module.exports = {
       req.session.adminLoginErr = false;
     }
   },
+  verifyCoupon: async(req, res)=>{
+    let coupon = await adminHelper.verfiyCoupon(req.params.id)
+    if(coupon == null){
+      res.json({message: 'Invalid coupon'})
+    }else{
+      if(coupon.isListed){
+        res.json({status: true, offerAmount: coupon.offerAmount})
+      }else{
+        res.json({status: false, message: 'Expired coupon'})
+      }
+    }
+  },
 
   postLogin: async (req, res, next) => {
     try {
@@ -50,12 +62,8 @@ module.exports = {
     });
   },
 
-  addCategory_get: (req, res) => {
-    res.render("admin/add-category");
-  },
-
   addCategory_post: async (req, res) => {
-    console.log(req.body);
+    console.log(req.files);
     try {
       const imgUrl = [];
       for (let i = 0; i < req.files.length; i++) {
@@ -72,7 +80,7 @@ module.exports = {
       console.log(err);
     } finally {
       req.session.submitStatus = "category Added";
-      res.redirect("/admin/add-category");
+      res.redirect("/admin/view-categories");
     }
   },
 
@@ -183,7 +191,7 @@ module.exports = {
   },
 
   addBanner: async (req, res) => {
-
+    console.log(req.body)
     try {
       const imgUrl = [];
       for (let i = 0; i < req.files.length; i++) {
@@ -218,7 +226,7 @@ module.exports = {
   createCode: async (req, res) => {
 
     console.log(req.body)
-    let token = crypto.randomBytes(8).toString('hex');
+    let token = "COUPON" +crypto.randomBytes(1).toString('hex');
     req.body.code = token;
     req.body.offerAmount = +req.body.offerAmount;
     req.body.minPurchase = +req.body.minPurchase;

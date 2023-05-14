@@ -14,34 +14,42 @@
     <div class="container">
 
       <div class="row">
-        
+
         <div class="col-md-6 mb-5 mb-md-0">
           <h2 class="h3 mb-3 text-black">Billing Details</h2>
           <form id="checkout-form">
             <div class="p-3 p-lg-5 border">
 
-              <p class="text-danger" style="display: none" id="addressmsg">Select or Add an Address</p>             
+              <p class="text-danger" style="display: none" id="addressmsg">Select or Add an Address</p>
               <%if(hasAddress){%>
                 <%for(let i=0; i < address.length; i++){%>
                   <div class="card mb-3">
-                    <h5 class="card-header text-dark"><input type="radio" name="selectedaddress" value="<%=i%>">  <%=address[i].username%></h5>
+                    <h5 class="card-header text-dark"><input type="radio" name="selectedaddress" value="<%=i%>">
+                      <%=address[i].username%>
+                    </h5>
                     <div class="card-body text-dark">
-                      <h5 class="card-title text-dark"><%=address[i].mobile%></h5>
-                      <p class="card-text text-dark"><%=address[i].address%>, <%=address[i].district%>, <%=address[i].state%>.</p>
-                      <p class="card-text text-dark"><%=address[i].pincode%>.</p>                    
+                      <h5 class="card-title text-dark">
+                        <%=address[i].mobile%>
+                      </h5>
+                      <p class="card-text text-dark">
+                        <%=address[i].address%>, <%=address[i].district%>, <%=address[i].state%>.
+                      </p>
+                      <p class="card-text text-dark">
+                        <%=address[i].pincode%>.
+                      </p>
                     </div>
                   </div>
-                <%}%>
-              <%}%>
-              
-               
-              <div class="form-group row mb-5">
-                <input type="text" class="form-control" id="c_phone" name="userId" placeholder="" value="<%=user._id%>"
-                  hidden>
-              </div>
-              <div class="form-group">
-                <a class="btn btn-primary btn-sm py-3 btn-block" href="/add-address">&plus; Add new Address.</a>
-              </div>
+                  <%}%>
+                    <%}%>
+
+
+                      <div class="form-group row mb-5">
+                        <input type="text" class="form-control" id="c_phone" name="userId" placeholder=""
+                          value="<%=user._id%>" hidden>
+                      </div>
+                      <div class="form-group">
+                        <a class="btn btn-primary btn-sm py-3 btn-block" href="/add-address">&plus; Add new Address.</a>
+                      </div>
             </div>
         </div>
         <div class="col-md-6">
@@ -58,7 +66,8 @@
                   <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
                     aria-describedby="button-addon2">
                   <div class="input-group-append">
-                    <button class="btn btn-primary btn-sm" type="button" id="coupon-apply" onclick="addCoupon()">Apply</button>
+                    <button class="btn btn-primary btn-sm" type="button" id="coupon-apply"
+                      onclick="addCoupon()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -66,19 +75,18 @@
           </div>
 
           <div class="border p-3 mb-3">
-            <h3 class="h6 mb-0"><a class="d-block" 
-               role="button" aria-expanded="false" aria-controls="collapsebank">
-               <input type="radio" name="paymentmethod" value="onlinePayment" class="mr-3">   Online Payment</a></h3>
+            <h3 class="h6 mb-0"><a class="d-block" role="button" aria-expanded="false" aria-controls="collapsebank">
+                <input type="radio" name="paymentmethod" value="onlinePayment" class="mr-3"> Online Payment</a></h3>
           </div>
 
           <div class="border p-3 mb-3">
             <h3 class="h6 mb-0"><a class="d-block" role="button">
-              <input type="radio" name="paymentmethod" value="COD" class="mr-3">   Cash On Delivery</a></h3>
+                <input type="radio" name="paymentmethod" value="COD" class="mr-3"> Cash On Delivery</a></h3>
           </div>
           <h4 class="text-danger" id="walletmsg" style="display: none;">Not enough Balance</h4>
           <div class="border p-3 mb-3">
             <h3 class="h6 mb-0"><a class="d-block" role="button">
-              <input type="radio" name="paymentmethod" value="wallet" class="mr-3">   Wallet</a></h3>
+                <input type="radio" name="paymentmethod" value="wallet" class="mr-3"> Wallet</a></h3>
           </div>
           <div class="row mb-5">
             <div class="col-md-12">
@@ -98,18 +106,19 @@
                       <td>Polo Shirt <strong class="mx-2">x</strong> 1</td>
                       <td>$100.00</td>
                     </tr>
-                    
+
                     <tr>
                       <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
                       <td class="text-black font-weight-bold" id="total"><strong>$<%=total%></strong></td>
                     </tr>
                   </tbody>
 
-                  <input  name="orderTotal" id="orderTotal" value="<%=total%>" hidden>
-                
+                  <input name="orderTotal" id="orderTotal" value="<%=total%>" hidden>
+
                 </table>
                 <div class="form-group">
-                  <button class="btn btn-primary btn-lg py-3 btn-block" type="submit" onclick="checkOut()">Place Order</button>
+                  <button class="btn btn-primary btn-lg py-3 btn-block" type="submit" onclick="checkOut()">Place
+                    Order</button>
                 </div>
               </div>
             </div>
@@ -158,7 +167,7 @@
           <a href="#" class="block-6">
             <img src="images/hero_1.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
             <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
-            <p>Promo from  nuary 15 &mdash; 25, 2019</p>
+            <p>Promo from nuary 15 &mdash; 25, 2019</p>
           </a>
         </div>
         <div class="col-md-6 col-lg-3">
@@ -184,12 +193,16 @@
       <div class="row pt-5 mt-5 text-center">
         <div class="col-md-12">
           <p>
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with
+            <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank"
+              class="text-primary">Colorlib</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
           </p>
         </div>
-        
+
       </div>
     </div>
   </footer>
@@ -208,55 +221,55 @@
   <script src="/js/main1.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    function addCoupon(){
+    function addCoupon() {
       let code = document.getElementById("c_code").value
       fetch('/admin/verify-coupon/' + code, {
-        method:'GET'
+        method: 'GET'
       })
-      .then(r => r.json())
-      .then((response)=>{
-        if(response.message){
-          document.getElementById('message').style.display = 'block'
-        }else if(response.status){
-          let total = '<%=total%>' - response.offerAmount;
-          document.getElementById('total').innerHTML = "$" +total
-          document.getElementById('orderTotal').value = +total
-        } 
-      })
+        .then(r => r.json())
+        .then((response) => {
+          if (response.message) {
+            document.getElementById('message').style.display = 'block'
+          } else if (response.status) {
+            let total = '<%=total%>' - response.offerAmount;
+            document.getElementById('total').innerHTML = "$" + total
+            document.getElementById('orderTotal').value = +total
+          }
+        })
     }
 
     function checkOut() {
       let form = document.getElementById('checkout-form');
       form.addEventListener('submit', event => {
         event.preventDefault();
-      
+
         const formData = new FormData(form)
         const data = new URLSearchParams(formData)
-      
-        fetch('/checkout',{
+
+        fetch('/checkout', {
           method: 'POST',
           body: data,
         }).then(r => r.json())
-        .then(response => {
-          if(response.codSuccess){
-            location.href = '/order-success'
-          }else if(response.walletSuccess){
-            console.log(response)
-            location.href= '/order-success'
-          }else if(response.onlinepayment){
-            console.log(response)
-            razorPayment(response)
-          }else if(response.error){
-            document.getElementById('addressmsg').style.display = "block"
-          }else{
-            document.getElementById('walletmsg').style.display = "block"
-          }
-        }) 
+          .then(response => {
+            if (response.codSuccess) {
+              location.href = '/order-success'
+            } else if (response.walletSuccess) {
+              console.log(response)
+              location.href = '/order-success'
+            } else if (response.onlinepayment) {
+              console.log(response)
+              razorPayment(response)
+            } else if (response.error) {
+              document.getElementById('addressmsg').style.display = "block"
+            } else {
+              document.getElementById('walletmsg').style.display = "block"
+            }
+          })
       })
     }
 
-    function razorPayment(order){
-      var options = { 
+    function razorPayment(order) {
+      var options = {
         "key": "rzp_test_bYaik8BIHFQdLC", // Enter the Key ID generated from the Dashboard
         "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         "currency": "INR",
@@ -264,19 +277,19 @@
         "description": "Test Transaction",
         "image": "https://example.com/your_logo",
         "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response){
-            verifyPayment(response, order)
+        "handler": function (response) {
+          verifyPayment(response, order)
         },
         "prefill": {
-            "name": "Gaurav Kumar",
-            "email": "gaurav.kumar@example.com",
-            "contact": "9000090000"
+          "name": "Gaurav Kumar",
+          "email": "gaurav.kumar@example.com",
+          "contact": "9000090000"
         },
         "notes": {
-            "address": "Razorpay Corporate Office"
+          "address": "Razorpay Corporate Office"
         },
         "theme": {
-            "color": "#3399cc"
+          "color": "#3399cc"
         },
         callback_url: 'http://localhost:3000/orders/razorpay-success',
         redirect: true
@@ -285,9 +298,9 @@
       rzp1.open();
     }
 
-    
 
-    function verifyPayment(payment, order){
+
+    function verifyPayment(payment, order) {
       console.log("verification")
       fetch('/verify-payment', {
         method: "POST",
@@ -295,14 +308,14 @@
           payment,
           order
         }),
-        headers:{
+        headers: {
           "Content-type": "application/json; charset=UTF-8"
         }
       }).then(response => {
         console.log(response)
-      }) 
+      })
     }
   </script>
-</body>
-</html>
-  
+  </body>
+
+  </html>

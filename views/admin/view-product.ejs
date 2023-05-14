@@ -5,20 +5,14 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Products</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
                 </div>
                 <div>
                     <a class="btn btn-primary btn-sm rounded" href="/admin/add-product" id="add-product">Create new</a>
                 </div>
             </div>
             <div class="card mb-4">
-                <header class="card-header">
-                    
-                  
-                   
-                </header> 
-                <table class="table table-hover" id="myTable">
-                    <thead>
+                <table class="table table-hver mt-3" id="myTable">
+                    <thead style="margin-top: 20px;">
                         <tr>
                             <th scope="col">Image</th>
                             <th scope="col">Title</th>
@@ -37,15 +31,13 @@
                                 
                                 <td><%= products.description%></td>
                                 <td><span class=""><%=products.stock%></span></td>
-                                <td><span class="badge rounded-pill alert-warning"><%=products.price%></span></td>
+                                <td><span class="">$<%=products.price%></span></td>
 
                                 <td class="text-end d-flex">
                                     <div class="col-lg-2 col-sm-2 col-4 col-action text-end d-flex">
                                         <a href="/admin/edit-product/<%= products._id %>" class="btn btn-sm font-sm rounded btn-brand mr-5">
                                             <i class="material-icons md-edit"></i> Edit
-                                        </a>
-                                        
-                                          
+                                        </a>                                          
                                         <%if(products.isListed){%>
                                             <button onclick="unlistProduct('<%= products._id%>')" class="btn btn-sm font-sm btn-light rounded" id="unlist-product">
                                                 <i class="material-icons md-delete_forever"></i> Unlist
@@ -62,42 +54,6 @@
                     </tbody>
                 </table><!-- card-header end// -->
                 <div class="card-body">
-                    <!-- <div class="row align-items-center">
-                        <div class="col col-check flex-grow-0">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                            <a class="itemside" href="#">
-                                
-                                <div class="info">
-                                    <h6 class="mb-0">Image</h6>
-                                </div>
-                                <div class="info">
-                                    <h6 class="mb-0">Title</h6>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-2 col-sm-2 col-4 col-price"><h6>Description</h6> </div>
-                        
-                        
-                        <div class="col-lg-1 col-sm-2 col-4 col-date pr-5">
-                            <h6>Price</h6>
-                        </div>
-                        <div class="col-lg-1 col-sm-2 col-4 col-date pr-5">
-                            <h6>In Stock</h6>
-                        </div>
-                        <div class="col-lg-2 col-sm-2 col-4 col-action text-end text-center">
-                            <h6>Action</h6>
-                        </div>
-                    </div> -->
-                    <!-- <br>
-                    
-                    <hr> -->
-
-
-                    <!-- itemlist  .// -->
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
         </section> <!-- content-main end// -->

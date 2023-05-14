@@ -98,9 +98,7 @@ module.exports = {
 
     getAllOrders: ()=>{
         return new Promise ((resolve, reject) => {
-            let orders = db.get().collection(collection.ORDER_COLLECTION).aggregate([
-
-            ])
+            let orders = db.get().collection(collection.ORDER_COLLECTION).find().toArray()
             resolve(orders)  
         })
     },
@@ -221,6 +219,12 @@ module.exports = {
         let countUsers = await db.get().collection(collection.ORDER_COLLECTION).countDocuments()
         return countUsers
     },
+
+    findProductCount: async () => {
+        let countUsers = await db.get().collection(collection.PRODUCT_COLLECTION).countDocuments()
+        return countUsers
+    },
+
     getBanners: ()=>{
         return new Promise(async(resolve, reject) => {
             let banners = await db.get().collection(collection.BANNER_COLLECTION).find().toArray()

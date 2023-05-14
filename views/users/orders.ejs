@@ -303,7 +303,7 @@
     <script src="js/main.js"></script>
     <script>
       function cancelOrder(id) {
-        console.log(id)
+        console.log(id);
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -314,17 +314,16 @@
           confirmButtonText: "Yes, Cancel it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("called")
-            fetch("/cancel-order/"+id, {
+            console.log("called");
+            fetch("/cancel-order/" + id, {
               method: "GET",
             }).then(() => {
-             location.reload();
+              location.reload();
             });
           }
         });
       }
       function returnOrder(id) {
-
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -335,11 +334,11 @@
           confirmButtonText: "Yes, Return it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("called")
-            fetch("/return-order/"+id, {
+            console.log("called");
+            fetch("/return-order/" + id, {
               method: "GET",
             }).then(() => {
-             location.reload();
+              location.reload();
             });
           }
         });

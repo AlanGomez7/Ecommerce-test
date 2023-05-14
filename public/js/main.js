@@ -7,7 +7,45 @@
 jQuery(document).ready(function($) {
 
 	"use strict";
-
+	if ( $.fn.elevateZoom ) {
+		  $('#product-zoom').elevateZoom({
+			  gallery:'product-zoom-gallery',
+			  galleryActiveClass: 'active',
+			  zoomType: "inner",
+			  cursor: "crosshair",
+			  zoomWindowFadeIn: 400,
+			  zoomWindowFadeOut: 400,
+			  responsive: true
+		  });
+		  // On click change thumbs active item
+		  $('.product-gallery-item').on('click', function (e) {
+			  $('#product-zoom-gallery').find('a').removeClass('active');
+			  $(this).addClass('active');
+	
+			  e.preventDefault();
+		  });
+	
+		  var ez = $('#product-zoom').data('elevateZoom');
+	
+		  // Open popup - product images
+		  $('#btn-product-gallery').on('click', function (e) {
+			  if ( $.fn.magnificPopup ) {
+				  $.magnificPopup.open({
+					  items: ez.getGalleryList(),
+					  type: 'image',
+					  gallery:{
+						  enabled:true
+					  },
+					  fixedContentPos: false,
+					  removalDelay: 600,
+					  closeBtnInside: false
+				  }, 0);
+	
+				  e.preventDefault();
+			  }
+		  });
+	  }
+	
 	var slider = function() {
 		$('.nonloop-block-3').owlCarousel({
 	    center: false,
@@ -41,12 +79,12 @@ jQuery(document).ready(function($) {
 		$('<div class="site-mobile-menu"></div>').prependTo('.site-wrap');
 
 		$('<div class="site-mobile-menu-header"></div>').prependTo('.site-mobile-menu');
+
 		$('<div class="site-mobile-menu-close "></div>').prependTo('.site-mobile-menu-header');
+		
 		$('<div class="site-mobile-menu-logo"></div>').prependTo('.site-mobile-menu-header');
 
 		$('<div class="site-mobile-menu-body"></div>').appendTo('.site-mobile-menu');
-
-		
 
 		$('.js-logo-clone').clone().appendTo('.site-mobile-menu-logo');
 
@@ -291,9 +329,35 @@ function addToCart(id) {
 		// console.log(count, "|||||||||||||||||||||||||||||")
 	  let count = document.getElementById('cart-count').innerText;
 		let numericalCount = +count + 1
-		document.getElementById('cart-count').innerText = numericalCount 
+		document.getElementById('cart-count').innerText = numericalCount
+		Swal.fire(
+			{
+				title: 'Listed',
+				text:'This product will be seen.',
+				icon:'success',
+				timer: '1500'
+			}
+		) 
 	  }else if(!res.status){
 		location.href='/login'
 	  }
 	})
+}
+
+function addCategory(){
+  document.getElementById('category-btn').style.display = "block"
+}
+
+function storeCategory(){
+  let form = document.getElementById('category-form');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(form)
+    const data = new URLSearchParams(formData)
+  
+    fetch('/admin/add-category',{
+  	method: 'POST',
+  	body: data,
+    })
+  })
 }

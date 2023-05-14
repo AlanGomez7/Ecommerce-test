@@ -1,65 +1,73 @@
 <%- include('../partials/user-header')%>
-<link href="/css/main.css" rel="stylesheet" type="text/css" /> 
+    <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
-</header>
-<body>
-    <div class="screen-overlay"></div>
+    </header>
 
-    <main class="main-wrap">
-        
-        <section class="content-main">
-            <div class="row">
-                <div class="col-6">
-                    <div class="content-header">
-                        <h2 class="content-title">Edit Profile</h2>
-                        <a href="/my-orders" class="btn btn-md rounded font-sm hover-up mb-5" style="background-color: gainsboro; color: black;">View Orders</a>
+    <body>
+        <div class="screen-overlay"></div>
+
+        <main class="main-wrap">
+
+            <section class="content-main">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="content-header">
+                            <h2 class="content-title">Edit Profile</h2>
+                            <a href="/my-orders" class="btn btn-md rounded font-sm hover-up mb-5"
+                                style="background-color: gainsboro; color: black;">View Orders</a>
+                        </div>
+
                     </div>
-
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <form action="/edit-profile/<%= currentUser._id %>" method="post">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>1. General info</h6>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <form action="/edit-profile/<%= currentUser._id %>" method="post">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <h6>1. General info</h6>
+                                        </div>
+                                        <div class="col-md-9">
+
+                                            <div class="mb-4">
+                                                <label class="form-label">Username</label>
+                                                <input type="text" placeholder="Type here" name="username"
+                                                    class="form-control" value="<%= currentUser.username%>">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" placeholder="Type here" name="firstname"
+                                                    class="form-control" value="<%= currentUser.firstname%>">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" placeholder="Type here" name="lastname"
+                                                    class="form-control" value="<%= currentUser.lastname%>">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Email</label>
+                                                <input placeholder="Type here" class="form-control" name="email"
+                                                    rows="4" value="<%= currentUser.email%>">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label">Mobile No:</label>
+                                                <input placeholder="Type here" class="form-control" name="mobile"
+                                                    rows="4" value="<%= currentUser.mobile%>">
+                                            </div>
+                                        </div> <!-- col.// -->
+                                    </div> <!-- row.// -->
+                                    <hr class="mb-4 mt-0">
+                                    <!-- row.// -->
+                                    <div class="d-flex justify-content-center">
+                                        <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                                        <button class="btn btn-md rounded font-sm hover-up mb-5" type="submit"
+                                            style="background-color: blueviolet;">Update</button>
                                     </div>
-                                    <div class="col-md-9">
-                                        
-                                        <div class="mb-4">
-                                            <label class="form-label">Username</label>
-                                            <input type="text" placeholder="Type here" name="username" class="form-control" value="<%= currentUser.username%>">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">First Name</label>
-                                            <input type="text" placeholder="Type here" name="firstname" class="form-control" value="<%= currentUser.firstname%>">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">Last Name</label>
-                                            <input type="text" placeholder="Type here" name="lastname" class="form-control" value="<%= currentUser.lastname%>">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">Email</label>
-                                            <input placeholder="Type here" class="form-control" name="email" rows="4" value="<%= currentUser.email%>">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">Mobile No:</label>
-                                            <input placeholder="Type here" class="form-control" name="mobile" rows="4" value="<%= currentUser.mobile%>">
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                 <!-- row.// -->
-                              <div class="d-flex justify-content-center">
-                                <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
-                                <button class="btn btn-md rounded font-sm hover-up mb-5" type="submit" style="background-color: blueviolet;">Update</button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            </div>
-        </section> <!-- content-main end// -->
-<%- include("../partials/admin-footer")%>
+                </div>
+            </section> <!-- content-main end// -->
+            <%- include("../partials/admin-footer")%>

@@ -1,10 +1,10 @@
 var express = require("express");
 var router = express.Router();
-const userController = require("../controllers/userControllers");
-const pageController = require("../controllers/pageControllers");
-const productController = require("../controllers/productControllers");
+const userController = require("../controllers/userController");
+const pageController = require("../controllers/pageController");
+const productController = require("../controllers/productController");
 const middleware = require("../middleware/loginmiddleware");
-const cartControllers = require("../controllers/cartControllers"); 
+const cartControllers = require("../controllers/cartController"); 
 const adminHelper = require("../helpers/adminHelper");
 
 
@@ -31,7 +31,7 @@ router.get("/edit-profile", pageController.profileEditing);
 
 router.post("/edit-profile/:id", pageController.post_profileEditing);
 
-router.route("/cart").get(cartControllers.cart);
+router.route("/cart", middleware.verifyLoggin).get(cartControllers.cart);
 
 router.route("/product-details/:id").get(productController.productDetails);
 

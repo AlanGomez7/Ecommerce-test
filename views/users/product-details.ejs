@@ -12,7 +12,7 @@
       <div class='container'>
         <div class='row'>
           <div class='col-md-6'>
-            <img src='<%= product.image %>' alt='Image' class='img-fluid  h-auto w-75' >
+            <img src='<%= product.image %>' alt='Image' class='img-fluid  h-auto w-75' id="product-zoom"  data-zoom-image="<%=product.image%>">
           </div>
           <div class='col-md-6'>
             <h2 class='text-black'><%= product.title %></h2>
@@ -55,7 +55,6 @@
               <!-- <button class='buy-now btn btn-sm btn-primary' >Add to Cart</button> -->
               <!-- onclick='addToCart(<%= product._id%>)' -->
             </p>
-
           </div>
         </div>
       </div>

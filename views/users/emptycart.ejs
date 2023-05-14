@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Shopping cart</title>
-    <meta charset="utf-8">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
-    <link rel="stylesheet" href="/fonts/icomoon/style.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/magnific-popup.css">
-    <link rel="stylesheet" href="/css/jquery-ui.css">
-    <link rel="stylesheet" href="/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/css/owl.theme.default.min.css">    
-    <link rel="stylesheet" href="/css/aos.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </head>
-  <body>
-    
+<head>
+  <title>Shopping cart</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700" />
+  <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/magnific-popup.css" />
+  <link rel="stylesheet" href="/css/jquery-ui.css" />
+  <link rel="stylesheet" href="/css/owl.carousel.min.css" />
+  <link rel="stylesheet" href="/css/owl.theme.default.min.css" />
+  <link rel="stylesheet" href="/css/aos.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
   <div class="site-wrap">
     <header class="site-navbar" role="banner">
       <div class="site-navbar-top">
         <div class="container">
           <div class="row align-items-center">
-
             <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
               <form action="" class="site-block-top-search">
                 <span class="icon icon-search2"></span>
-                <input type="text" class="form-control border-0" placeholder="Search">
+                <input type="text" class="form-control border-0" placeholder="Search" />
               </form>
             </div>
 
@@ -43,13 +43,16 @@
               <div class="site-top-icons">
                 <ul>
                   <!-- <li><a href="#"><span class="icon icon-person"></span></a></li> -->
-                  <li class="d-inline-block d-md-none ml-md-0"><a href="/admin/view-product" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
+                  <li class="d-inline-block d-md-none ml-md-0">
+                    <a href="/admin/view-product" class="site-menu-toggle js-menu-toggle"><span
+                        class="icon-menu"></span></a>
+                  </li>
                 </ul>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
-      </div> 
+      </div>
       <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
           <ul class="site-menu js-clone-nav d-none d-md-block">
@@ -62,27 +65,36 @@
           </ul>
         </div>
       </nav>
-     
     </header>
 
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Contact</strong></div>
-        </div>
-      </div>
-    </div>  
-
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            
-            <h2 class="display-3" style="color: gainsboro;">Hey Your cart feels Empty!</h2>
-            <p><a href="/shop" class="btn btn-sm btn-primary">Back to shop</a></p>
+          <div class="col-md-12 mb-0">
+            <a href="/">Home</a> <span class="mx-2 mb-0">/</span>
+            <strong class="text-black">Contact</strong>
           </div>
         </div>
       </div>
     </div>
 
-    <%-include('../partials/user-footer')%> 
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h2 class="display-3" style="color: gainsboro">
+              Hey Your cart feels Empty!
+            </h2>
+            <p>
+              <a href="/shop" class="btn btn-sm btn-primary">Back to shop</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%-include('../partials/user-footer')%>
+  </div>
+</body>
+
+</html>

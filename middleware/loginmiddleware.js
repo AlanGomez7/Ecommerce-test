@@ -1,14 +1,18 @@
 const createHttpError = require("http-errors");
+const userHelper = require('../helpers/userHelper')
 
 module.exports = {
 
     
-     verifyLoggin : (req, res, next)=>{
-        if(req.session.userLoggedIn === true){ 
-          res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-          res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-          res.setHeader("Expires", "0");
-          next()
+     verifyLoggin : async(req, res, next)=>{
+       if(req.session.userLoggedIn){
+          let user = await userHelper.getUser(req.session.user)
+          if(user.isAllowed){
+            next()
+          }else{
+            req.session.user = false;
+            res.redirect('/login');
+          }
         }else{
           res.redirect('/login');
         }

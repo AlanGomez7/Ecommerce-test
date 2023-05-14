@@ -92,6 +92,7 @@
 <script src="/js/main.js"></script>
 
 <script>
+
   function deleteCartItem(cartId, proId) {
     fetch('/delete-cart-item', {
       method: 'DELETE',
@@ -148,7 +149,7 @@
     const productCards = document.querySelectorAll('.product-cards');
     // console.log(productCards);
 
-    productCards.forEach(card => {
+    productCards.forEach(card => { 
       const price = card.dataset.price;
       console.log(price)
       if(parseInt(price) < minAmount || parseInt(price) > maxAmount){

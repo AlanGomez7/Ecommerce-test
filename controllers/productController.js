@@ -1,18 +1,17 @@
 const adminHelper = require('../helpers/adminHelper');
 const productHelpers = require('../helpers/productHelper');
-const userHelper = require('../helpers/userHelper');
-var objectId = require('mongodb').ObjectId;
 const cloudinary = require('../utils/cloundinary');
-const upload = require('../utils/multer');
-const { response } = require('express');
-var objectId = require('mongodb').ObjectId;
+const productSchema = require('../models/productModel');
+
+
 const crypto = require('crypto');
+const Joi = require('joi');
 
 module.exports = {
   
   productDetails: async (req, res) => {
     console.log(req.session.user)
-    let product = await productHelpers.   getSingleProduct(req.params.id);
+    let product = await productHelpers.getSingleProduct(req.params.id);
     console.log(product);
     res.render('users/product-details', { product, user: req.session.user, cartCount: req.session.cartCount });
   },
@@ -48,32 +47,32 @@ module.exports = {
    }
   },
 
-  AddProductFunc: (req, res) => {
+  AddProduct: (req, res) => {
+    let error = req.session.productErr;
     adminHelper.getCategories().then((categories) => {
-      res.render('admin/add-product', { categories });
+      res.render('admin/add-product', { categories, error });
     });
   },
 
   postAddProduct: async (req, res) => {
-    
     try {
       req.body.stock = +req.body.stock;
       req.body.price = +req.body.price;
       req.body.uniqueId = crypto.randomBytes(8).toString('hex')
-      
-
+      const {error, value} = await productSchema.productSchema.validate(req.body);
+      if(error) throw new Error(error)
       const imgUrl = [];
-      
       for (let i = 0; i < req.files.length; i++) {
         const result = await cloudinary.uploader.upload(req.files[i].path);
         imgUrl.push(result.url);
       }
-      productHelpers.addProducts(req.body, async (id) => {
+      productHelpers.addProducts(value, async (id) => {
         productHelpers.addProductImages(id, imgUrl).then((response) => {
         });
       });
     } catch (err) {
-      // console.log(err);
+      req.session.productErr = err.message;
+      res.redirect('/admin/ add-product')
     } finally {
       req.session.submitStatus = 'product Added';
       res.redirect('/admin/view-product');
