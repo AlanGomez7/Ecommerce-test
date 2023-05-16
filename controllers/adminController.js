@@ -22,6 +22,7 @@ module.exports = {
       req.session.adminLoginErr = false;
     }
   },
+
   verifyCoupon: async(req, res)=>{
     let coupon = await adminHelper.verfiyCoupon(req.params.id)
     if(coupon == null){
@@ -63,8 +64,9 @@ module.exports = {
   },
 
   addCategory_post: async (req, res) => {
-    console.log(req.files);
     try {
+      let categories = await adminHelpers.getCategories()
+      req.body.isListed = true;
       const imgUrl = [];
       for (let i = 0; i < req.files.length; i++) {
         const result = await cloudinary.uploader.upload(req.files[i].path);
@@ -92,18 +94,14 @@ module.exports = {
   },
 
   getOrder: async (req, res) => {
-
+    
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 5;
     const skip = (page - 1) * pageSize;
-
     let orders = await adminHelpers.getOrders(skip, pageSize)
     const count = await adminHelpers.findOrderCount();
-
     const totalPages = Math.ceil(count / pageSize);
     const currentPage = page > totalPages ? totalPages : page;
-
-
     res.render("admin/order", { orders, totalPages, currentPage, pageSize, result: 0 });
 
   },

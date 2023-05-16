@@ -138,6 +138,16 @@ module.exports = {
             });
         })
     },
+
+    deleteWishlistProduct: (details) => {
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.WISHLIST_COLLECTION).updateOne({_id: ObjectId(details.cartId)},{
+                $pull: {products: {item:ObjectId(details.proId)}}
+            }).then((response)=>{
+                resolve(response)
+            });
+        })
+    },
     getTotalAmount : (userId) => {
         return new Promise(async (resolve, reject) => {
             let total = await db

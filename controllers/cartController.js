@@ -118,6 +118,7 @@ module.exports = {
     if (req.session.userLoggedIn) {
       cartCount = await userHelpers.getCartCount(req.session.user._id);
       let products = await productHelpers.getCartProducts(req.session.user._id);
+      console.log()
       for (let i = 0; i < products.length; i++) {
         if (products[i].product.stock == 0) {
           isInStock = false;

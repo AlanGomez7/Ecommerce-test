@@ -9,7 +9,6 @@
     </div>
   </div>
 </div>
-
 <div class="site-section">
   <div class="container">
     <div class="row mb-5">
@@ -43,32 +42,24 @@
                 <p class="text-primary font-weight-bold">
                   $<%= products.price%>
                 </p>
-                <button
-                  class="buy-now btn btn-sm btn-primary"
-                  onclick="addToCart('<%= products._id%>')"
-                >
-                  Add to Cart
+                <div class="d-flex">
+                  <button
+                    class="buy-now btn btn-sm btn-primary w-70 mr-2"
+                    onclick="addToCart('<%= products._id%>')"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                  class="btn icon icon-heart-o btn-sm btn-primary"
+                  onclick="addToWishlist('<%= products._id%>')"
+                  >
                 </button>
+                </div>
               </div>
             </div>
           </div>
           <%})%>
         </div>
-        <!-- <div class="row" data-aos="fade-up">
-          <div class="col-md-12 text-center">
-            <div class="site-block-27">
-              <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
       </div>
       <div class="col-md-3 order-1 mb-5 mb-md-0">
         <div class="border p-4 rounded mb-4">

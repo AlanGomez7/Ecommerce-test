@@ -78,7 +78,7 @@ module.exports = {
           .then((data) => {
             console.log(data);
             callback(data.insertedId);
-          });
+        });
     },
     
     getCategories: ()=>{
@@ -86,6 +86,13 @@ module.exports = {
            let categories = db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
             resolve(categories);
             
+        })
+    },
+
+    getCategory: (categoryName)=>{
+        return new Promise((resolve, reject)=>{
+            let categories = db.get().collection(collection.CATEGORY_COLLECTION).findOne({categoryname: categoryName})
+            resolve(categories);         
         })
     },
 

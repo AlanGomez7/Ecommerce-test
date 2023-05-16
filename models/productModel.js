@@ -8,8 +8,6 @@ const productSchema = Joi.object({
     price: Joi.number().min(1).required(),
     category: Joi.string(),
     stock : Joi.number().min(1).required(),
-    isListed : Joi.boolean().required(),
-    image : Joi.array().required()
 });
 
 module.exports = {

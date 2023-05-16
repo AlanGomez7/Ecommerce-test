@@ -1,0 +1,66 @@
+<%- include ("../partials/user-header") %>
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black">Cart</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section">
+        <div class="container">
+            <div class="row mb-5">
+                <form class="col-md-12" method="post">
+                    <div class="site-blocks-table">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="product-thumbnail">Image</th>
+                                    <th class="product-name">Product</th>
+                                    <th class="product-price">Price</th>
+                                    <th class="product-remove">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <p>
+                                    <%=isInStock%>
+                                </p>
+                                <% products.forEach((products)=>{%>
+                                    <tr>
+                                        <td class="product-thumbnail">
+                                            <img src="<%=products.product.image %>" alt="Image" class="img-fluid">
+                                            <%if(products.product.stock==0){%>
+                                                <p class="mb-0 text-danger h5">Out of stock</p>
+                                            <%}%>
+                                        </td>
+                                        <td class="product-name">
+                                            <h2 class="h5 text-black">
+                                                <%=products.product.title%>
+                                            </h2>
+                                            <p>
+                                                <%=products.product.description%>
+                                            </p>
+                                        </td>
+                                        <td>$<%=products.product.price %>
+                                        </td>
+                                        
+                                        <!-- <td id="countTotal">$<%=products.product.price%></td> -->
+                                        <td>
+                                            <button class="btn btn-outline-primary js-btn-minus material-icons"
+                                            id="myBtn" type="button"
+                                            onclick="deleteWishlistItem('<%= products._id%>', '<%= products.product._id%>')"
+                                            >
+                                                delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <%})%>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include ("../partials/user-footer") %>
