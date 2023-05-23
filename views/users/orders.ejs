@@ -1,92 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Shopping cart</title>
-    <meta charset="utf-8" />
-    <meta
-      http-equiv="Cache-Control"
-      content="no-cache, no-store, must-revalidate"
-    />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"
-    />
-    <link rel="stylesheet" href="/fonts/icomoon/style.css" />
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/magnific-popup.css" />
-    <link rel="stylesheet" href="/css/jquery-ui.css" />
-    <link rel="stylesheet" href="/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="/css/owl.theme.default.min.css" />
-    <link rel="stylesheet" href="/css/aos.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </head>
-
-  <body>
-    <div class="site-wrap">
-      <header class="site-navbar" role="banner">
-        <div class="site-navbar-top">
-          <div class="container">
-            <div class="row align-items-center">
-              <div
-                class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left"
-              >
-                <form action="" class="site-block-top-search">
-                  <span class="icon icon-search2"></span>
-                  <input
-                    type="text"
-                    class="form-control border-0"
-                    placeholder="Search"
-                  />
-                </form>
-              </div>
-
-              <div
-                class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center"
-              >
-                <div class="site-logo">
-                  <a href="/" class="js-logo-clone">Shoppers</a>
-                </div>
-              </div>
-              <div class="col-6 col-md-4 order-3 order-md-3 text-right">
-                <div class="site-top-icons">
-                  <ul>
-                    <!-- <li><a href="#"><span class="icon icon-person"></span></a></li> -->
-                    <li class="d-inline-block d-md-none ml-md-0">
-                      <a
-                        href="/admin/view-product"
-                        class="site-menu-toggle js-menu-toggle"
-                        ><span class="icon-menu"></span
-                      ></a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <nav
-          class="site-navigation text-right text-md-center"
-          role="navigation"
-        >
-          <div class="container">
-            <ul class="site-menu js-clone-nav d-none d-md-block">
-              <li class="has-children">
-                <a href="/">Home</a>
-              </li>
-              <li><a href="/shop">Shop</a></li>
-              <li><a href="/new-arrivals">New Arrivals</a></li>
-              <li><a href="/contact">Contact</a></li>
-            </ul>
-          </div>
-        </nav>
+<%- include('../partials/user-header')%>
       </header>
       <div class="bg-light py-3">
         <div class="container">
@@ -102,17 +14,17 @@
       <div class="site-section">
         <div class="container">
           <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-12">
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th width="40%">Product</th>
+                      <th width="30%">Product</th>
                       <th width="20%">Unit Price</th>
                       <th width="20%">Quantity</th>
-                      <th width="20%">Total</th>
+                      <th width="10%">Total</th>
                       <th width="20%">Status</th>
-                      <th width="10%" class="text-end">Action</th>
+                      <th width="30%" class="pl-5">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -137,24 +49,60 @@
                       <td>
                         $<%=products[i].quantity * products[i].product.price%>
                       </td>
-                      <td class="text-warning"><%=order[i].status%></td>
                       <td class="text-end">
-                        <%if(order[i].status==="Delivered" ){%>
+                        <%if(products[i].status==="Delivered" ){%>
+                          <p class="text-success">Delivered</p>
+
+                        <%}else if(products[i].status==="Returned" ||
+                        products[i].status==="cancelled" ){%>
+                        <a                          
+                          style="
+                            color:red;
+                            border: none;
+                            width: 100px;
+                          "
+                        >
+                        <%=products[i].status%>
+                        </a>
+                        <%}else{%>
                         <button
-                          class="btn btn-danger btn-sm text-light"
+                          class="ml-1"
+                          style="border: none; background-color: white;"
+                          id="order"
+                          onclick="cancelOrder('<%=products[i]._id%>')"
+                        >
+                          <p class="text-success"><%=products[i].status%></p>
+                        </button>
+                        <%}%>
+                      </td>
+                      <td class="text-end">
+                        <%if(products[i].status==="Delivered" ){%>
+                        <button
+                          class="ml-1"
+                          style="border: none; background-color: white;"
+
                           id="order"
                           onclick="returnOrder('<%=products[i]._id%>')"
                         >
-                          Return
+                          <p class="text-warning">Return</p>
                         </button>
-                        <%}else if(order[i].status==="Returned" ||
-                        order[i].status==="cancelled" ){%>
-                        <a
-                          class="btn btn-danger btn-sm text-light"
+
+                        <button
+                          class="ml-1"
+                          style="border: none; background-color: white;"
                           id="order"
+                          onclick="downloadReport('<%=order[i]._id%>')"
+                        >
+                          <p class="text-info">Invoice</p>
+                        </button>
+                        <%}else if(products[i].status==="Returned" ||
+                        products[i].status==="cancelled" ){%>
+                        <a
+                        class="ml-3"                          
                           style="
-                            background-color: #7971ea;
-                            border-color: #7971ea;
+                            background-color:white;
+                            border: none;
+                            width: 100px;
                           "
                           href="/shop"
                         >
@@ -162,11 +110,12 @@
                         </a>
                         <%}else{%>
                         <button
-                          class="btn btn-danger btn-sm text-light"
+                          class="ml-1"
+                          style="border: none; background-color: white;"
                           id="order"
                           onclick="cancelOrder('<%=products[i]._id%>')"
                         >
-                          Cancel
+                          <p class="text-danger">Cancel</p>
                         </button>
                         <%}%>
                       </td>
@@ -302,6 +251,19 @@
 
     <script src="js/main.js"></script>
     <script>
+      function downloadReport(orderId) {
+        fetch("/admin/download-invoice/" + orderId, {
+          method: "GET",
+        })
+          .then((r) => r.json())
+          .then((res) => {
+            if (res.status) {
+              Swal.fire("Success!", "Invoice has been downloaded", "success");
+            } else {
+              Swal.fire("Failed!", "download failed", "failed");
+            }
+          });
+      }
       function cancelOrder(id) {
         console.log(id);
         Swal.fire({

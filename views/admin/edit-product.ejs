@@ -20,8 +20,9 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Product title</label>
+                                        <p class="text-danger" id="titleErr" style="display: none;">Invalid Title!</p>
                                         <input type="text" placeholder="Type here" name="title" class="form-control"
-                                            value="<%= product.title%>">
+                                            value="<%= product.title%>" id="title" onblur="titleVal()">
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Description</label>
@@ -31,7 +32,7 @@
                                     <div class="mb-4">
                                         <label class="form-label">Brand name</label>
                                         <input type="text" placeholder="Type here" name="brand" class="form-control"
-                                        value="<%= product.brand%>">
+                                            value="<%= product.brand%>">
                                     </div>
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
@@ -43,11 +44,27 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Cost in USD</label>
+                                        <p class="text-danger" id="priceErr" style="display: none;">Invalid Price!</p>
                                         <input type="number" placeholder="Type here" name="price" class="form-control"
-                                            value="<%= product.price%>">
+                                        id="product-price" value="<%= product.price%>" onblur="priceValidation()">
                                     </div>
                                 </div> <!-- col.// -->
-                            </div> <!-- row.// -->
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>3. Stock</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">No of Stock left</label>
+                                        <p class="text-danger" id="stockErr" style="display: none;">Invalid no of Stock!
+                                        </p>
+                                        <input type="number" placeholder="Type here" name="stock" class="form-control"
+                                           id="product-stock" value="<%= product.stock%>" onblur="stockValidation()">
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div><!-- row.// -->
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
@@ -58,14 +75,19 @@
                                         <div class="mb-4">
                                             <%for(let i=0; i < categories.length; i++){%>
                                                 <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                    <input class="form-check-input" checked="" name="category"
-                                                        type="radio" required multiple value="<%=product.categoryname%>">
-                                                    <span class="form-check-label">
-                                                        <%=categories[i].categoryname%>
-                                                    </span>
+                                                    <%if(product.category==categories[i]._id){%>
+                                                        <input class="form-check-input" checked name="category"
+                                                            type="radio" required multiple
+                                                            value="<%=categories[i]._id%>">
+                                                        <%}else{%>
+                                                            <input class="form-check-input" name="category" type="radio"
+                                                                required multiple value="<%=categories[i]._id%>">
+                                                            <%}%>
+                                                                <span class="form-check-label">
+                                                                    <%=categories[i].categoryname%>
+                                                                </span>
                                                 </label>
-                                            <%}%>
-
+                                                <%}%>
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- row.// -->
@@ -84,12 +106,33 @@
                                 </div> <!-- .row end// -->
                             </div>
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Publish</button>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit" id="publish-btn">Publish</button>
                             </div>
                     </form>
                 </div>
             </div>
         </div>
         </div>
-    </section> <!-- content-main end// -->
+    </section>
+    <script>
+        function priceValidation() {
+            let price = document.getElementById("product-price").innerHTML;
+            console.log(price);
+            let convertedPrice = parseFloat(price);
+            if (convertedPrice < 0) {
+                document.getElementById("priceErr").style.display = "block";
+                document.getElementById("publish-btn").disabled = "true";
+            }
+        }
+
+        function stockValidation() {
+            let stock = document.getElementById("product-stock").value;
+            console.log(stock);
+            let convertedStock = parseFloat(stock);
+            if (0 >= convertedStock) {
+                document.getElementById("stockErr").style.display = "block";
+                document.getElementById("publish-btn").disabled = "true";
+            }
+        }
+    </script><!-- content-main end// -->
     <%- include("../partials/admin-footer")%>

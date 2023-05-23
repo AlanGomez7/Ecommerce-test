@@ -7,7 +7,7 @@ const db = require("./config/connection");
 const adminRouter = require("./routes/admin");
 const usersRouter = require("./routes/users");
 const session = require("express-session");
-const crypto = require("crypto");
+
 
 
 require("dotenv").config()
@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
     secret: "key",
-    cookie: { maxAge: 600000 },
+    cookie: { maxAge: 6000000 },
     resave: false,
     saveUninitialized: true,
   })
@@ -54,16 +54,16 @@ db.connect((err) => {
   }
 });
 
-app.use("/admin", adminRouter); 
+app.use("/admin", adminRouter);
 app.use("/", usersRouter);
 // app.use("/admin/*")
 
-app.use(function(req, res, next) {  
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -71,11 +71,11 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
 
-  if(err.message === 'Not Found'){
+  if (err.message === 'Not Found') {
     res.render('404');
-  }else{
+  } else {
     res.render('error');
-  }  
+  }
 
 });
 

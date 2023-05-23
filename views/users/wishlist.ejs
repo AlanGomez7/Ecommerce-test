@@ -3,11 +3,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-                        class="text-black">Cart</strong></div>
+                    class="text-black">Cart</strong></div>
             </div>
         </div>
     </div>
-
     <div class="site-section">
         <div class="container">
             <div class="row mb-5">
@@ -20,6 +19,7 @@
                                     <th class="product-name">Product</th>
                                     <th class="product-price">Price</th>
                                     <th class="product-remove">Remove</th>
+                                    <th class="product-add">Add To Cart</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,14 +44,20 @@
                                         </td>
                                         <td>$<%=products.product.price %>
                                         </td>
-                                        
-                                        <!-- <td id="countTotal">$<%=products.product.price%></td> -->
                                         <td>
                                             <button class="btn btn-outline-primary js-btn-minus material-icons"
                                             id="myBtn" type="button"
                                             onclick="deleteWishlistItem('<%= products._id%>', '<%= products.product._id%>')"
                                             >
                                                 delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary js-btn-minus"
+                                            id="myBtn" type="button"
+                                            onclick="addToCart('<%= products.product._id%>')"
+                                            >
+                                            <i class="fa-solid fa-cart-shopping"></i>
                                             </button>
                                         </td>
                                     </tr>

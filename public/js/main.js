@@ -393,6 +393,7 @@ function deleteWishlistItem(cartId, proId) {
 }
 
 function addCategory() {
+  document.getElementById('editcat-btn').style.display = 'none'
   document.getElementById("category-btn").style.display = "block";
 }
 
@@ -402,10 +403,17 @@ function storeCategory() {
     event.preventDefault();
     const formData = new FormData(form);
     const data = new URLSearchParams(formData);
-
+    
     fetch("/admin/add-category", {
       method: "POST",
       body: data,
+    })
+    .then(r => r.json())
+    .then((response) => {
+      if(!response.status){
+        document.getElementById('catExsists').style.display = "block";
+        document.getElementById('catExsists').innerHTML = response.message;
+      }
     });
   });
 }
@@ -443,6 +451,7 @@ function listProduct(productId) {
     });
   }
 }
+
 
 function unlistProduct(productId) {
   document.getElementById("unlist-product").addEventListener("click", popup);

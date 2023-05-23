@@ -12,5 +12,5 @@ const addressSchema = Joi.object({
 });
 
 module.exports = {
-   addressSchema,
+    addressSchema,
 };

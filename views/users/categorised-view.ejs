@@ -33,11 +33,11 @@
               <div class="col-sm-6 col-lg-4 mb-4 product-cards" data-aos="fade-up" data-price="<%=result[i].price%>">
                 <div class="block-4 text-center border">
                   <figure class="block-4-image">
-                    <a href="/product-details/<%= result[i]._id %>"><img loading="lazy" src=<%=result[i].image %>
+                    <a href="/product-details/<%=result[i].uniqueId%>"><img loading="lazy" src="<%=result[i].image %>"
                       alt="Image placeholder" class="img-fluid w-100 h-75"></a>
                   </figure>
                   <div class="block-4-text p-4">
-                    <h3><a href="/product-details/<%= result[i]._id %>">
+                    <h3><a href="/product-details/<%= result[i].uniqueId%>">
                         <%= result[i].title %>
                       </a></h3>
                     <p class="mb-0">
@@ -61,19 +61,37 @@
           <div class="border p-4 rounded mb-4">
             <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
             <ul class="list-unstyled mb-0">
-              <%for(let i=0; i < category.length; i++){%>
-                <li class="mb-1"><a href="/category/<%= category[i]._id%>" class="d-flex"><span>
-                      <%=category[i].category%>
-                    </span> <span class="text-black ml-auto">(<%=i%>)</span></a></li>
-                <%}%>
+              <%category.forEach((elem)=>{%>
+              <li class="mb-1">
+                <a href="/category/<%=elem._id%>" class="d-flex"
+                  ><span><%=elem.categoryname%></span></a
+                >
+              </li>
+              <%})%>
             </ul>
           </div>
+          <!-- filter list --> 
+  
           <div class="border p-4 rounded mb-4">
             <h4>Filter By Price</h4>
-            <input type="number" placeholder="" name="minamount" id="minamount"
-              class="mb-3 rounded border-0 bg-light pl-5 w-75" value="30" onchange="onchangeHandler(event)" />
-            <input type="number" placeholder="" name="maxmount" id="maxamount"
-              class="mb-3 rounded border-0 bg-light pl-5 w-75" value="200" onchange="onchangeHandler(event)" />
+            <input
+              type="number"
+              placeholder="$"
+              name="minamount"
+              id="minamount"
+              class="mb-3 rounded border-0 bg-light pl-5 w-75"
+              value="30"
+              onchange="onchangeHandler(event)"
+            />
+            <input
+              type="number"
+              placeholder="$"
+              name="maxmount"
+              id="maxamount"
+              class="mb-3 rounded border-0 bg-light pl-5 w-75"
+              value="200"
+              onchange="onchangeHandler(event)"
+            />
           </div>
         </div>
 

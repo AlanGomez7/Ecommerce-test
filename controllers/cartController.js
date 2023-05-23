@@ -2,7 +2,9 @@ const userHelpers = require("../helpers/userHelper");
 const productHelpers = require("../helpers/productHelper");
 const adminHelpers = require("../helpers/adminHelper");
 const createHttpError = require("http-errors");
-var cartCount = 0;
+const sendmail = require('../utils/nodeMailer');
+
+let cartCount = 0;
 
 module.exports = {
   checkout_get: async (req, res) => {
@@ -10,7 +12,6 @@ module.exports = {
       let total = await userHelpers.getTotalAmount(req.session.user._id);
       if (total.length === 0) throw createHttpError.NotFound("Cart is empty");
       var address = await userHelpers.getAddress(req.session.user._id);
-      
       if (address === undefined) {
         res.render("users/checkout", {
           user: req.session.user,
@@ -48,12 +49,10 @@ module.exports = {
 
   checkout_post: async (req, res) => {
     try {
-
-      if(req.body.selectedaddress == undefined){
-        throw new Error('Please select an Address');
+      if (req.body.selectedaddress == undefined) {
+        throw new Error("Please select an Address");
       }
       var cartProducts = await userHelpers.getCartProductList(req.body.userId);
-      console.log(cartProducts);
 
       for (let i = 0; i < cartProducts.length; i++) {
         userHelpers.decreaseStock(
@@ -61,10 +60,8 @@ module.exports = {
           cartProducts[i].quantity
         );
       }
-
       if (cartProducts.length > 0) {
         var address = await userHelpers.getAddress(req.body.userId);
-        var total = await userHelpers.getTotalAmount(req.body.userId);
         userHelpers
           .placeOrder(
             address[req.body.selectedaddress],
@@ -77,16 +74,14 @@ module.exports = {
             if (req.body.paymentmethod == "COD") {
               res.send({ codSuccess: true });
             } else if (req.body.paymentmethod == "wallet") {
-              console.log(req.body.paymentmethod, "++++++++++");
               if (req.session.user.wallet >= parseInt(req.body.orderTotal)) {
-                console.log(req.body.orderTotal, typeof req.body.orderTotal);
                 userHelpers.walletPayment(req.body, req.body.orderTotal);
                 res.json({
                   walletSuccess: true,
                   message: "Payment successful",
                 });
               } else {
-                res.json({walletPayment: false})
+                res.json({ walletPayment: false });
               }
             } else if (req.body.paymentmethod == "onlinePayment") {
               userHelpers
@@ -101,7 +96,7 @@ module.exports = {
         res.redirect("/cart");
       }
     } catch (err) {
-      res.json({error: err.message});
+      res.json({ error: err.message });
     }
   },
 
@@ -118,14 +113,13 @@ module.exports = {
     if (req.session.userLoggedIn) {
       cartCount = await userHelpers.getCartCount(req.session.user._id);
       let products = await productHelpers.getCartProducts(req.session.user._id);
-      console.log()
       for (let i = 0; i < products.length; i++) {
         if (products[i].product.stock == 0) {
           isInStock = false;
         }
       }
       if (products.length == 0) {
-        res.render("users/emptycart");
+        res.render("users/emptycart", {cartCount, user: req.session.user});
       } else {
         let total = await userHelpers.getTotalAmount(req.session.user._id);
         res.render("users/cart", {
@@ -142,14 +136,12 @@ module.exports = {
   },
 
   deleteCartItem: async (req, res) => {
-    console.log(req.body);
     userHelpers.deleteCartProduct(req.body).then((response) => {
       res.send(response);
     });
   },
 
   orderSuccess: async (req, res, err) => {
-    console.log(req.body);
     if (!req.body.razorpay_signature) {
       res.redirect("/checkout");
     } else {
@@ -158,9 +150,11 @@ module.exports = {
       let products = await adminHelpers.getOrderProducts(
         req.session.currentOrder
       );
-      console.log(order);
       userHelpers.changeStatus(order[0]._id).then((res) => {});
-      res.render("users/order-confirmed", { order, products });
+      // SENDING CONFIRMATION MAIL TO THE USER
+      sendmail.mailOptions.to = req.session.user.email;
+      sendmail.sendMail();
+      res.render("users/order-confirmed", { order, products, user: req.session.user, cartCount });
     }
   },
 };

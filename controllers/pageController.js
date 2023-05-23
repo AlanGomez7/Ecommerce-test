@@ -2,24 +2,19 @@ const createHttpError = require('http-errors');
 const adminHelper = require('../helpers/adminHelper');
 const productHelpers = require('../helpers/productHelper');
 const userHelpers = require('../helpers/userHelper');
-const resetPasswordAuth = require('../utils/twilio')
+const resetPasswordAuth = require('../utils/twilio');
 let cartCount = 0;
 
 module.exports = {
   // landing Page function.
   landingPage: async (req, res) => {
-    let homeBanner;
     let user = req.session.user;
     let banners = await adminHelper.getBanners()
     if (req.session.user) {
       cartCount = await userHelpers.getCartCount(req.session.user._id);
     }
     let products=await productHelpers.getProducts()
-    console.log(products);
       let category = adminHelper.getCategories()
-
-
-      console.log(homeBanner);
       res.render('users/landing-page', { user, product: products, cartCount, category, banners});
 
   },
@@ -37,15 +32,16 @@ module.exports = {
   },
 
   post_profileEditing: (req, res) => {
-    // console.log(req.body, ":::::::::::::::::::::::::::::::::::::::")
     userHelpers.updateUser(req.params.id, req.body).then(() => {
       req.session.user = req.body;
       res.redirect('/edit-profile');
     });
   },
-
   // shopping page function
-  shoppingPage: (req, res) => {
+  shoppingPage: async(req, res) => {
+    if (req.session.user) {
+      cartCount = await userHelpers.getCartCount(req.session.user._id);
+    }
     adminHelper.getCategories().then((category) => {
       productHelpers.getProducts().then((products) => {
         res.render('users/shop', { products, category, cartCount, user: req.session.user });
@@ -56,10 +52,11 @@ module.exports = {
   // Cart function.
 
   applyCategory: (req, res) => {
-    adminHelper.getCategories().then((category) => {
+    adminHelper.getCategories().then(async(category) => {
       let user = req.session.user;
+      cartCount = await userHelpers.getCartCount(req.session.user._id);
       productHelpers.getCategory(req.params.id).then((result) => {
-        res.render('users/categorised-view', { result, category, user, cartCount: req.session.cartCount});
+        res.render('users/categorised-view', { result, category, user, cartCount: r});
       });
     });
   },
@@ -82,7 +79,6 @@ module.exports = {
 
   submitOtp: async(req, res) => {
     try {
-      console.log(req.session.mobile, "mobile number is:");
       let user = await userHelpers.getUserByMobile(req.session.mobile)
       // req.session.user = user
       let result = await resetPasswordAuth.verifyOtp(req.session.mobile, req.body.otp)
@@ -96,7 +92,6 @@ module.exports = {
 
   updatePassword_post: async(req, res) =>{
     try {
-      console.log(req.session.mobile);
       let password = req.body.password;
       let user = await userHelpers.getUserByMobile(req.session.mobile);
       let result = await userHelpers.updatePassword(user._id, password).then((result) => {

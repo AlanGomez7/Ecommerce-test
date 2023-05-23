@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const cloudinary = require("../utils/cloundinary");
 const upload = require("../utils/multer");
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
@@ -21,8 +20,8 @@ router.get(
   middleware.verifyAdmin,
   productController.AddProduct
 );
-
-router.get("/dashboard", adminController.getDashboard);
+  
+router.get("/dashboard",middleware.verifyAdmin, adminController.getDashboard);
 
 router.post(
   "/add-product",
@@ -37,14 +36,26 @@ router.get("/manage-user", middleware.verifyAdmin, (req, res) => {
 });
 
 router.get("/unlist-product/:id", async (req, res) => {
-  productHelpers.unListProduct(req.params.id).then((response) => {
+  productHelpers.unListProduct(req.params.id).then(() => {
     res.redirect("/admin/view-product");
   });
 });
 
 router.get("/list-product/:id", async (req, res) => {
-  productHelpers.listProduct(req.params.id).then((response) => {
+  productHelpers.listProduct(req.params.id).then(() => {
     res.redirect("/admin/view-product");
+  });
+});
+
+router.get("/list-category/:id", async (req, res) => {
+  adminHelper.listCategory(req.params.id).then(() => {
+    res.redirect("/admin/view-categories");
+  });
+});
+
+router.get("/unlist-category/:id", async (req, res) => {
+  adminHelper.unlistCategory(req.params.id).then(() => {
+    res.redirect("/admin/view-categories");
   });
 });
 
@@ -58,8 +69,8 @@ router.patch("/unblock-user/:id", (req, res) => {
   res.redirect("/admin/manage-user");
 });
 
-router.get("/banners", adminController.viewBanners);
-router.post("/banners", upload.array("Image"), adminController.addBanner);
+router.get("/banners",middleware.verifyAdmin, adminController.viewBanners);
+router.post("/banners",middleware.verifyAdmin, upload.array("Image"), adminController.addBanner);
 router.get("/delete-banner/:id", adminController.deleteBanner);
 
 router
@@ -78,6 +89,11 @@ router
   .get(middleware.verifyAdmin, adminController.viewCategory);
 
 router.get("/orders", middleware.verifyAdmin, adminController.getOrder);
+router.post(
+  "/edit-category",
+  middleware.verifyAdmin,
+  adminController.editCategory_post
+);
 
 router.get(
   "/order-details/:id",
@@ -103,6 +119,7 @@ router.patch(
   middleware.verifyAdmin,
   adminController.listCoupon
 );
+
 router.patch(
   "/unlist-coupon/:id",
   middleware.verifyAdmin,

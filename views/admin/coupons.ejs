@@ -3,7 +3,6 @@
     <div class="content-header">
       <div>
         <h2 class="content-title card-title">Coupons</h2>
-        <p>Lorem ipsum dolor sit amet.</p>
       </div>
       <div>
         <button class="btn btn-primary btn-sm rounded" onclick="addCoupon()">Add Coupons</button>
@@ -41,6 +40,36 @@
               </div>
             </div> <!-- col.// -->
           </div>
+          <hr class="mb-4 mt-0">
+          <div class="row">
+            <div class="col-md-3">
+              <h6>3. Expiration Time</h6>
+            </div>
+            <div class="col-md-9">
+              <div class="mb-4">
+                <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                  <input class="form-check-input" checked="" name="expiration" type="radio" value="1 day">
+                  <span class="form-check-label"> 1 day </span>
+                </label>
+                <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                  <input class="form-check-input" name="expiration" type="radio" value="3 days">
+                  <span class="form-check-label"> 3 Days </span>
+                </label>
+                <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                  <input class="form-check-input" name="expiration" type="radio" value="7 days">
+                  <span class="form-check-label"> 7 Days </span>
+                </label>
+                <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                  <input class="form-check-input" name="expiration" type="radio" value=" 30 days">
+                  <span class="form-check-label"> 30 Days </span>
+                </label>
+                <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                  <input class="form-check-input" name="expiration" type="radio" value="1 year">
+                  <span class="form-check-label"> 1 Year </span>
+                </label>
+              </div>
+            </div><!-- col.// -->
+          </div>
           <div class="d-flex justify-content-center">
             <button class="btn btn-md rounded font-sm hover-up " type="submit">Generate Coupon</button>
           </div>
@@ -53,11 +82,6 @@
         <%for(let i=0; i < coupons.length; i++){ %>
           <article class="itemlist">
             <div class="row align-items-center">
-              <div class="col col-check flex-grow-0">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox">
-                </div>
-              </div>
               <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                 <a class="itemside" href="#">
                   <div class="info">

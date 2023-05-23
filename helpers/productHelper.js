@@ -1,19 +1,17 @@
-var db = require('../config/connection');
-var collection = require('../config/collection');
-const ObjectId = require('mongodb').ObjectId;
-const { image } = require('../utils/cloundinary');
-const { response } = require('express');
-const { Collection } = require('mongodb');
+var db = require("../config/connection");
+var collection = require("../config/collection");
+const ObjectId = require("mongodb").ObjectId;
+const { image } = require("../utils/cloundinary");
+const { response } = require("express");
+const { Collection } = require("mongodb");
 
 module.exports = {
   addProducts: (product, callback) => {
-
     product.isListed = true;
     db.get()
       .collection(collection.PRODUCT_COLLECTION)
       .insertOne(product)
       .then((data) => {
-        console.log(data);
         callback(data.insertedId);
       });
   },
@@ -41,9 +39,7 @@ module.exports = {
   },
 
   addProductImages: (proId, imgUrl) => {
-    console.log(proId, 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
     return new Promise(async (resolve, reject) => {
-      console.log(imgUrl, 'kkkkkkkkkkkkkkkkkkkkkkkkkkkk');
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
         .updateOne(
@@ -61,9 +57,7 @@ module.exports = {
   },
 
   addCategoryImages: (catId, imgUrl) => {
-    console.log(catId);
     return new Promise(async (resolve, reject) => {
-      console.log(imgUrl);
       db.get()
         .collection(collection.CATEGORY_COLLECTION)
         .updateOne(
@@ -81,9 +75,7 @@ module.exports = {
   },
 
   addBannerImages: (bannerId, imgUrl) => {
-  
     return new Promise(async (resolve, reject) => {
-      console.log(imgUrl);
       db.get()
         .collection(collection.BANNER_COLLECTION)
         .updateOne(
@@ -106,7 +98,6 @@ module.exports = {
         .collection(collection.PRODUCT_COLLECTION)
         .deleteOne({ _id: ObjectId(proid) })
         .then((response) => {
-          //    console.log(response);
           resolve(response);
         });
     });
@@ -147,7 +138,6 @@ module.exports = {
     });
   },
   getProductDetails: (productId) => {
-    console.log("/////////////////////////////", productId);
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
@@ -157,11 +147,11 @@ module.exports = {
         });
     });
   },
-  getSingleProduct: (uniqueId)=>{
+  getSingleProduct: (uniqueId) => {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
-        .findOne({ uniqueId:uniqueId })
+        .findOne({ uniqueId: uniqueId })
         .then((product) => {
           resolve(product);
         });
@@ -169,9 +159,8 @@ module.exports = {
   },
 
   updateProducts: (proId, productDetails) => {
-    console.log(productDetails.price)
     return new Promise((resolve, reject) => {
-      productDetails.price=parseInt(productDetails.price)
+      productDetails.price = parseInt(productDetails.price);
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
         .updateOne(
@@ -183,6 +172,7 @@ module.exports = {
               brand: productDetails.brand,
               description: productDetails.description,
               price: productDetails.price,
+              stock: productDetails.stock
             },
           }
         )
@@ -211,9 +201,9 @@ module.exports = {
           db.get()
             .collection(collection.CART_COLLECTION)
             .updateOne(
-              {user: ObjectId(userId), 'products.item': ObjectId(proId) },
+              { user: ObjectId(userId), "products.item": ObjectId(proId) },
               {
-                $inc: { 'products.$.quantity': 1 },
+                $inc: { "products.$.quantity": 1 },
               }
             )
             .then(() => {
@@ -260,27 +250,29 @@ module.exports = {
             $match: { user: ObjectId(userId) },
           },
           {
-            $unwind: '$products',
+            $unwind: "$products",
           },
           {
             $project: {
-              item: '$products.item',
-              quantity: '$products.quantity',
+              item: "$products.item",
+              quantity: "$products.quantity",
             },
           },
           {
             $lookup: {
               from: collection.PRODUCT_COLLECTION,
-              localField: 'item',
-              foreignField: '_id',
-              as: 'product',
+              localField: "item",
+              foreignField: "_id",
+              as: "product",
             },
           },
           {
-            $project:{
-              item:1, quantity:1, product: {$arrayElemAt: ['$product', 0]}
-            }
-          }
+            $project: {
+              item: 1,
+              quantity: 1,
+              product: { $arrayElemAt: ["$product", 0] },
+            },
+          },
         ])
         .toArray();
       resolve(listItems);
@@ -297,27 +289,29 @@ module.exports = {
             $match: { user: ObjectId(userId) },
           },
           {
-            $unwind: '$products',
+            $unwind: "$products",
           },
           {
             $project: {
-              item: '$products.item',
-              quantity: '$products.quantity',
+              item: "$products.item",
+              quantity: "$products.quantity",
             },
           },
           {
             $lookup: {
               from: collection.PRODUCT_COLLECTION,
-              localField: 'item',
-              foreignField: '_id',
-              as: 'product',
+              localField: "item",
+              foreignField: "_id",
+              as: "product",
             },
           },
           {
-            $project:{
-              item:1, quantity:1, product: {$arrayElemAt: ['$product', 0]}
-            }
-          }
+            $project: {
+              item: 1,
+              quantity: 1,
+              product: { $arrayElemAt: ["$product", 0] },
+            },
+          },
         ])
         .toArray();
       resolve(cartItems);
@@ -334,15 +328,17 @@ module.exports = {
     });
   },
   searchProducts: (search) => {
-    return new Promise(async(resolve, reject) => {
-      let result = await db.get().collection(collection.PRODUCT_COLLECTION).find(
-        {$or:
-          [
-            {title: {$regex: search, $options: "i"}}
-          ]
-        }
-      ).toArray();
-      resolve(result)
+    return new Promise(async (resolve, reject) => {
+      let result = await db
+        .get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .find({ $or: [
+          { title: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+          { brand : { $regex: search, $options: "i" } }
+        ] })
+        .toArray();
+      resolve(result);
     });
   },
 
@@ -365,9 +361,9 @@ module.exports = {
           db.get()
             .collection(collection.WISHLIST_COLLECTION)
             .updateOne(
-              {user: ObjectId(userId), 'products.item': ObjectId(proId) },
+              { user: ObjectId(userId), "products.item": ObjectId(proId) },
               {
-                $inc: { 'products.$.quantity': 1 },
+                $inc: { "products.$.quantity": 1 },
               }
             )
             .then(() => {
@@ -399,7 +395,7 @@ module.exports = {
           .insertOne(wishlistObj)
           .then((response) => {
             resolve();
-        });
+          });
       }
     });
   },

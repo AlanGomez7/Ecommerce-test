@@ -10,14 +10,14 @@ const wishlistController = require("../controllers/wishlistController");
 // login route for user
 router
   .route("/login")
-  .get(userController.loginFunction)
-  .post(userController.postLoginFunction);
+  .get(userController.login)
+  .post(userController.postLogin);
 
 // signup route for user
 router
   .route("/signup")
-  .get(userController.signupFunction)
-  .post(userController.postSignupFunction);
+  .get(userController.signup)
+  .post(userController.postSignup);
 
 // home route for user
 router.get("/", pageController.landingPage);

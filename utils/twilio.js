@@ -1,7 +1,7 @@
 const router = require('../routes/users');
 require("dotenv").config()
 
-const authToken = "d03f7a8fb82c5b076b5836108546bcd8";
+const authToken = "bb3bc6667f85d32c6f9308a7cde44716";
 const accountSid= "AC4dbc5ee09c1902c8d09ad3cf24fd2765";
 const verifySid = "VA78b8b449952ff5208bf0bf5c400beea3";
 const client = require('twilio')(accountSid, authToken);

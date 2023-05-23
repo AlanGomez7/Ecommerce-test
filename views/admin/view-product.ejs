@@ -11,15 +11,17 @@
             </div>
         </div>
         <div class="card mb-4">
+            <div class="card-body">
+
             <table class="table table-hver mt-3" id="myTable">
                 <thead style="margin-top: 20px;">
-                    <tr>
+                    <tr class="m-5">
                         <th scope="col">Image</th>
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
                         <th scope="col">In stock</th>
                         <th scope="col">price</th>
-                        <th scope="col" class=""> Action </th>
+                        <th scope="col"> Action </th>
                     </tr>
                 </thead>
 
@@ -63,7 +65,6 @@
                         <%})%>
                 </tbody>
             </table><!-- card-header end// -->
-            <div class="card-body">
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </section> <!-- content-main end// -->
@@ -104,6 +105,8 @@
         $(document).ready(function () {
             $('#myTable').DataTable();
         });
+
+        document.getElementById('myTable_filter').style.marginTop = "50px"
     </script>
     </body>
 

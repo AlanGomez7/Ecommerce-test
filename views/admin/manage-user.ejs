@@ -12,11 +12,6 @@
                  <!-- card-header end// -->
                 <div class="card-body">
                     <div class="row align-items-center">
-                        <div class="col col-check flex-grow-0">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox">
-                            </div>
-                        </div>
                         <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                             <a class="itemside" href="#">
                                 
@@ -38,39 +33,31 @@
                     <%users.forEach((user)=>{%>
                         <article class="itemlist">
                             <div class="row align-items-center">
-                                
-                                    <div class="col col-check flex-grow-0">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox">
+                                <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                                    <a class="itemside" href="">
+                                        
+                                        <div class="info">
+                                            <h6 class="mb-0"><%= user.username%></h6>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                                        <a class="itemside" href="">
-                                            
-                                            <div class="info">
-                                                <h6 class="mb-0"><%= user.username%></h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span><%= user.email %></span> </div>
-                                    
-                                   
-                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                        <!-- onclick="confirmBlock(user._id)" -->
-                                       <% if(user.isAllowed){ %>
-
-                                        <button  type="button" class="btn btn-sm font-sm btn-danger rounded" id="<%=user._id%>" onclick="blockUser('<%=user._id%>')">
-                                            <i class="material-icons md-edit"></i> Block
+                                    </a>
+                                </div>
+                                <div class="col-lg-2 col-sm-2 col-4 col-price"> <span><%= user.email %></span> </div>
+                                
+                                
+                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                    <!-- onclick="confirmBlock(user._id)" -->
+                                   <% if(user.isAllowed){ %>
+                                    <button  type="button" class="btn btn-sm font-sm btn-danger rounded" id="<%=user._id%>" onclick="blockUser('<%=user._id%>')">
+                                        <i class="material-icons md-edit"></i> Block
+                                    </button>
+                                        
+                                    <%}else if(!user.isAllowed){%>
+                                        <button  type="button" class="btn btn-sm font-sm btn-light rounded" id="<%=user._id%>" onclick="unblockUser('<%=user._id%>')">
+                                            <i class="material-icons md-edit"></i> Unblock
                                         </button>
-                                            
-                                        <%}else if(!user.isAllowed){%>
-
-                                            <button  type="button" class="btn btn-sm font-sm btn-light rounded" id="<%=user._id%>" onclick="unblockUser('<%=user._id%>')">
-                                                <i class="material-icons md-edit"></i> Unblock
-                                            </button>
-                                            
-                                        <%}%>
-                                    </div>
+                                        
+                                    <%}%>
+                                </div>
                             </div> <!-- row .// -->
 
                         </article>

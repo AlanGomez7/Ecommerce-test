@@ -1,8 +1,4 @@
-var express = require("express");
-var router = express.Router();
 const cloudinary = require("../utils/cloundinary");
-const upload = require("../utils/multer");
-var objectId = require("mongodb").ObjectId;
 const createError = require("http-errors");
 const adminHelpers = require("../helpers/adminHelper");
 const couponHelpers = require("../helpers/couponHelper");
@@ -10,10 +6,11 @@ const invoiceHelpers = require("../utils/invoice");
 const productHelpers = require("../helpers/productHelper");
 const authSchema = require("../models/authmodel");
 const userHelper = require("../helpers/userHelper");
-const crypto = require("crypto")
+const crypto = require("crypto");
+const adminHelper = require("../helpers/adminHelper");
 
 module.exports = {
-  login: (req, res, next) => { 
+  login: (req, res, next) => {
     if (req.session.admin) {
       res.redirect("/admin");
     } else {
@@ -23,15 +20,15 @@ module.exports = {
     }
   },
 
-  verifyCoupon: async(req, res)=>{
-    let coupon = await adminHelper.verfiyCoupon(req.params.id)
-    if(coupon == null){
-      res.json({message: 'Invalid coupon'})
-    }else{
-      if(coupon.isListed){
-        res.json({status: true, offerAmount: coupon.offerAmount})
-      }else{
-        res.json({status: false, message: 'Expired coupon'})
+  verifyCoupon: async (req, res) => {
+    let coupon = await adminHelper.verfiyCoupon(req.params.id);
+    if (coupon == null) {
+      res.json({ message: "Invalid coupon" });
+    } else {
+      if (coupon.isListed && coupon.isActive) {
+        res.json({ status: true, offerAmount: coupon.offerAmount });
+      } else {
+        res.json({ status: false, message: "Expired coupon" });
       }
     }
   },
@@ -58,84 +55,109 @@ module.exports = {
 
   viewProducts: (req, res) => {
     productHelpers.getAllProducts().then((products) => {
-      console.log(products, "|||||||||||||||||||||||");
       res.render("admin/view-product", { products });
     });
   },
 
   addCategory_post: async (req, res) => {
     try {
-      let categories = await adminHelpers.getCategories()
-      req.body.isListed = true;
-      const imgUrl = [];
-      for (let i = 0; i < req.files.length; i++) {
-        const result = await cloudinary.uploader.upload(req.files[i].path);
-        imgUrl.push(result.url);
+      let catname = req.body.categoryname;
+      if (catname.length < 3) throw createError.Forbidden("Invalid Input");
+      req.body.categoryname = catname.toUpperCase();
+      let result = await adminHelpers.getCategory(req.body.categoryname);
+      if (result == undefined){
+        req.body.isListed = true;
+        adminHelpers.addCategory(req.body, async (id) => {});
+      }else{
+        throw createError.Forbidden("Already Exsists");
       }
-      adminHelpers.addCategory(req.body, async (id) => {
-        console.log(id);
-        productHelpers.addCategoryImages(id, imgUrl).then((response) => {
-          // console.log(response);
-        });
-      });
     } catch (err) {
-      console.log(err);
-    } finally {
+      res.json({status: false, message: "Category already exists"})
+    }
+  },
+
+  editCategory_post: async (req, res) => {
+    try {
+      let catname = req.body.categoryname;
+      if (catname.length < 3) throw createError.Forbidden("Invalid Input");
+      req.body.categoryname = catname.toUpperCase();
+      adminHelpers.editCategory(req.body);
+
       req.session.submitStatus = "category Added";
       res.redirect("/admin/view-categories");
+    } catch (err) {
+      console.log(err);
     }
   },
 
   viewCategory: (req, res) => {
     adminHelpers.getCategories().then((categories) => {
-      console.log(categories);
       res.render("admin/view-categories", { categories, banners: false });
     });
   },
 
   getOrder: async (req, res) => {
-    
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 5;
     const skip = (page - 1) * pageSize;
-    let orders = await adminHelpers.getOrders(skip, pageSize)
+    let orders = await adminHelpers.getOrders(skip, pageSize);
     const count = await adminHelpers.findOrderCount();
     const totalPages = Math.ceil(count / pageSize);
     const currentPage = page > totalPages ? totalPages : page;
-    res.render("admin/order", { orders, totalPages, currentPage, pageSize, result: 0 });
-
+    res.render("admin/order", {
+      orders,
+      totalPages,
+      currentPage,
+      pageSize,
+      result: 0,
+    });
   },
 
   downloadInvoice: async (req, res) => {
     try {
-      let products = await adminHelpers.getOrderProducts(req.params.id);
-      console.log(products)
-
+      const products = await adminHelpers.getOrderProducts(req.params.id);       
+    
       for (let i = 0; i < products.length; i++) {
-
         let data = {
-          "quantity": products[i].quantity,
-          "description": products[i].product.title,  
-          "tax-rate": 6,
-          "price": products[i].product.price
-        }
-        console.log(data);
+          quantity: products[i].quantity,
+          description: products[i].product.title,
+          "tax-rate": 0,
+          price: products[i].product.price,
+        };
         invoiceHelpers.data.products.push(data);
-
       }
-      invoiceHelpers.generateInvoice()
-
-      res.json({ status: true })
-
+      invoiceHelpers.generateInvoice();
+      res.json({ status: true });
     } catch (err) {
-      res.json({ status: false })
+      res.json({ status: false });
     }
+  },
+
+  downloadReport: async (req, res) => {
+    try {
+      let order = await adminHelpers.getDeliveredOrders();
+      for (let i = 0; i < order.length; i++) {
+        let data = {
+          name: order[i].quantity,
+          description: order[i].paymenthMethod,
+          "tax-rate": 6,
+          price: order[i].total,
+        };
+        invoiceHelpers.data.products.push(data);
+      }
+      invoiceHelpers.generateInvoice();
+
+      res.json({ status: true });
+    } catch (err) {
+      console.log(err);
+      res.json({ status: false });
+    }
+
   },
 
   orderDetails: async (req, res) => {
     let orderDetails = await adminHelpers.orderDetails(req.params.id);
     let products = await adminHelpers.getOrderProducts(req.params.id);
-
     res.render("admin/order-details", {
       products,
       orderDetails,
@@ -144,19 +166,16 @@ module.exports = {
   },
 
   adminCancelOrder: async (req, res) => {
-    console.log(req.params.id);
-    let order = await adminHelpers.orderDetails(req.params.id)
-    console.log(order)
+    let order = await adminHelpers.orderDetails(req.params.id);
     adminHelpers.cancelOrder(req.params.id).then((response) => {
       if (order[0].status === "Placed" && order.paymentMethod !== "COD") {
-        adminHelpers.returnMoney(order[0].userId, order[0].total)
+        adminHelpers.returnMoney(order[0].userId, order[0].total);
       }
       res.send(response);
     });
   },
 
   deliveredOrder: async (req, res) => {
-    console.log(req.params.id);
     adminHelpers.deliveredOrder(req.params.id).then((response) => {
       res.send(response);
     });
@@ -165,31 +184,32 @@ module.exports = {
   getDashboard: async (req, res) => {
     let orders = await adminHelpers.getAllOrders();
     let amount = await adminHelpers.totalOrderAmount();
-    console.log(amount)
+    let productsCount = await adminHelpers.findProductCount()
     let cancelCount = await adminHelpers.cancelledOrderCount();
     let pendingCount = await adminHelpers.pendingOrderCount();
     let placedCount = await adminHelpers.placedOrderCount();
-
     let result = [];
     result.push(cancelCount, placedCount, pendingCount);
-
     let stats = await userHelper.orderCount();
-
     let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < stats.length; i++) {
       data[stats[i]._id] = stats[i].totalAmount;
     }
-    console.log(stats);
-    res.render("admin/dashboard", { result, order: orders.length, data, amount });
+    res.render("admin/dashboard", {
+      result,
+      order: orders.length,
+      data,
+      amount,
+      productsCount
+    });
   },
 
   viewBanners: async (req, res) => {
-    let banners = await adminHelpers.getBanners()
-    res.render("admin/view-banners", { banners })
+    let banners = await adminHelpers.getBanners();
+    res.render("admin/view-banners", { banners });
   },
 
   addBanner: async (req, res) => {
-    console.log(req.body)
     try {
       const imgUrl = [];
       for (let i = 0; i < req.files.length; i++) {
@@ -197,10 +217,7 @@ module.exports = {
         imgUrl.push(result.url);
       }
       adminHelpers.addBanner(req.body, async (id) => {
-        console.log(id);
-        productHelpers.addBannerImages(id, imgUrl).then((response) => {
-          // console.log(response);
-        });
+        productHelpers.addBannerImages(id, imgUrl).then((response) => {});
       });
     } catch (err) {
       console.log(err);
@@ -211,32 +228,28 @@ module.exports = {
   },
   deleteBanner: (req, res) => {
     adminHelpers.deleteBanner(req.params.id).then((response) => {
-      res.json({ deleted: true })
-    })
+      res.json({ deleted: true });
+    });
   },
   getCoupons: async (req, res) => {
-
     let coupons = await adminHelpers.getCoupons();
 
-    res.render("admin/coupons", { coupons })
+    res.render("admin/coupons", { coupons });
   },
 
   createCode: async (req, res) => {
-
-    console.log(req.body)
-    let token = "COUPON" +crypto.randomBytes(1).toString('hex');
+    let token = "COUPON" + crypto.randomBytes(2).toString("hex");
     req.body.code = token;
     req.body.offerAmount = +req.body.offerAmount;
     req.body.minPurchase = +req.body.minPurchase;
     req.body.isListed = true;
-
-
+    req.body.isActive = true;
     adminHelpers.addCoupons(req.body);
     let coupons = await adminHelpers.getCoupons();
-    res.render("admin/coupons", { coupons })
+    res.render("admin/coupons", { coupons });
   },
   listCoupon: (req, res) => {
-    couponHelpers.listCoupon(req.params.id).then((response) => {
+    couponHelpers.listCoupon(req.params.id).then(() => {
       res.redirect("/admin/coupons");
     });
   },
@@ -245,5 +258,4 @@ module.exports = {
       res.redirect("/admin/coupons");
     });
   },
-
 };
