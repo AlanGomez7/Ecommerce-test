@@ -23,6 +23,7 @@
     "multer": "^1.4.5-lts.1",
     "nocache": "^3.0.4",
     "nodemailer": "^6.9.2",
+    "pdfjs-dist": "^3.6.172",
     "razorpay": "^2.8.6",
     "sweetalert2": "^11.4.8",
     "twilio": "^4.10.0"
