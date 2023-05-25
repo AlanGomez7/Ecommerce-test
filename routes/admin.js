@@ -128,7 +128,5 @@ router.patch(
 
 router.get("/verify-coupon/:id", adminController.verifyCoupon);
 
-router.get("/download-invoice/:id", adminController.downloadInvoice);
-
 router.get('/sales-report', adminController.salesReport);
 module.exports = router;
