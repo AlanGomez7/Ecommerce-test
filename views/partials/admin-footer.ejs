@@ -47,7 +47,9 @@
     }
 
     $(document).ready(function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            paging: false
+        });
     });
 
     function listCategory(categoryId) {

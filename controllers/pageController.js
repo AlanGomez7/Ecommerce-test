@@ -54,9 +54,13 @@ module.exports = {
   applyCategory: (req, res) => {
     adminHelper.getCategories().then(async(category) => {
       let user = req.session.user;
-      cartCount = await userHelpers.getCartCount(req.session.user._id);
+      if(req.session.userLoggedIn){
+        cartCount = await userHelpers.getCartCount(req.session.user._id);
+      }else{
+        cartCount = 0;
+      }
       productHelpers.getCategory(req.params.id).then((result) => {
-        res.render('users/categorised-view', { result, category, user, cartCount: r});
+        res.render('users/categorised-view', { result, category, user, cartCount});
       });
     });
   },
