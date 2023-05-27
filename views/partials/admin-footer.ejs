@@ -40,9 +40,12 @@
     function titleVal(){
         let titleName = document.getElementById('title').value;
         console.log(titleName);
-        if (titleName.length < 7 || titleName.length > 20) {
+        if (titleName.length < 3 || titleName.length > 20) {
             document.getElementById('titleErr').style.display = "block"
-            document.getElementById('publish-btn').disabled = "true"
+            document.getElementById('publish-btn').disabled = true
+        }else{
+            document.getElementById('titleErr').style.display = "none"
+            document.getElementById('publish-btn').disabled = false
         }
     }
 
@@ -133,7 +136,10 @@
         let catname = document.getElementById('catname').value;
         if (catname.length < 3) {
             document.getElementById('catnameErr').style.display = "block"
-            document.getElementById('publish-btn').disabled = "true"
+            document.getElementById('publish-btn').disabled = true
+        }else{
+            document.getElementById('catnameErr').style.display = "block"
+            document.getElementById('publish-btn').disabled = false
         }
     }
 
@@ -142,7 +148,10 @@
         console.log(catname)
         if (catname.length < 3) {
             document.getElementById('catErr').style.display = "block"
-            document.getElementById('apply-btn').disabled = "true"
+            document.getElementById('apply-btn').disabled = true
+        }else{
+            document.getElementById('catErr').style.display = "none"
+            document.getElementById('apply-btn').disabled = false
         }
     }
 

@@ -97,9 +97,9 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="mb-4">
-                                            <img src="<%= product.image %>" style="height: auto; width: 75px;"><br>
+                                            <img src="<%= product.image %>" style="height: auto; width: 75px;" id="imgView"><br>
                                             <label class="form-label">Images</label>
-                                            <input class="form-control" type="file" name="Image" multiple>
+                                            <input class="form-control" type="file" name="Image" multiple onchange="changeImage(event)">
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- .row end// -->
@@ -114,6 +114,9 @@
         </div>
     </section>
     <script>
+        function changeImage(event){
+            document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
+        }
         function priceValidation() {
             let price = document.getElementById("product-price").innerHTML;
             console.log(price);
@@ -121,6 +124,9 @@
             if (convertedPrice < 0) {
                 document.getElementById("priceErr").style.display = "block";
                 document.getElementById("publish-btn").disabled = "true";
+            }else{
+                document.getElementById("priceErr").style.display = "none";
+                document.getElementById("publish-btn").disabled = false;
             }
         }
 
@@ -130,7 +136,10 @@
             let convertedStock = parseFloat(stock);
             if (0 >= convertedStock) {
                 document.getElementById("stockErr").style.display = "block";
-                document.getElementById("publish-btn").disabled = "true";
+                document.getElementById("publish-btn").disabled = true;
+            }else{
+                document.getElementById("stockErr").style.display = "none";
+                document.getElementById("publish-btn").disabled = false;
             }
         }
     </script><!-- content-main end// -->

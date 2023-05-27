@@ -232,4 +232,10 @@ module.exports = {
       result: 0,
     });
   },
+
+  logout: (req, res)=>{
+    let err = ''
+    req.session.adminLoggedIn = false;
+    res.render('admin/admin-login', {err})
+  }
 };

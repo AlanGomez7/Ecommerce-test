@@ -70,7 +70,7 @@
                                                     <%=categories[i].categoryname%>
                                                 </span>
                                             </label>
-                                        <%}%>
+                                            <%}%>
                                     </div>
                                 </div> <!-- col.// -->
                             </div>
@@ -83,9 +83,11 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Stock Available</label>
-                                        <p class="text-danger" id="stockErr" style="display: none;">Invalid no of Stock!</p>
+                                        <p class="text-danger" id="stockErr" style="display: none;">Invalid no of Stock!
+                                        </p>
                                         <input type="text" name="stock" placeholder="No of available peices"
-                                            class="form-control" id="product-stock" onblur="stockValidation()" multiple required>
+                                            class="form-control" id="product-stock" onblur="stockValidation()" multiple
+                                            required>
                                     </div>
                                 </div> <!-- col.// -->
                             </div>
@@ -97,8 +99,11 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
+                                        <img src="" style="height: auto; width: 75px;"
+                                            id="imgView"><br>
                                         <label class="form-label">Images</label>
-                                        <input class="form-control" type="file" name="Image" multiple required>
+                                        <input class="form-control" type="file" name="Image" multiple required
+                                            onchange="changeImage(event)">
                                     </div>
                                 </div><!-- col.// -->
                             </div><!--.row end// -->
@@ -114,6 +119,8 @@
         </div>
     </section> <!-- content-main end// -->
     <script>
-
+        function changeImage(event) {
+            document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
+        }
     </script>
     <%- include("../partials/admin-footer")%>

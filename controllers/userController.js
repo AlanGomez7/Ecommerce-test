@@ -216,7 +216,6 @@ module.exports = {
     let product = await adminHelpers.userOrderedProducts(req.session.user._id);
     let order = await adminHelpers.getOrderDetails(req.session.user._id);
     let products = bindHelper.bindOrderDetails(order, product);
-    console.log(products)
     res.render("users/orders", { products, order, user: req.session.user, cartCount});
   },
 

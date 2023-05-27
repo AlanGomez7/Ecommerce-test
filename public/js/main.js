@@ -324,7 +324,6 @@ const updateKeyPosition = (e) => {
 const grantAccess = () => {
   // restore the cursor
   key.parentElement.parentElement.style.cursor = "default";
-
   // change the text of the heading and paragraph elements
   heading.textContent = "🎉 yay 🎉";
   paragraph.textContent = "access granted";
@@ -493,7 +492,10 @@ function priceValidation() {
   let convertedPrice = parseFloat(price);
   if (convertedPrice < 0) {
     document.getElementById("priceErr").style.display = "block";
-    document.getElementById("publish-btn").disabled = "true";
+    document.getElementById("publish-btn").disabled = true;
+  }else{
+    document.getElementById("priceErr").style.display = "none";
+    document.getElementById("publish-btn").disabled = false;
   }
 }
 
@@ -502,6 +504,9 @@ function stockValidation() {
   let convertedStock = parseFloat(stock);
   if (0 >= convertedStock) {
     document.getElementById("stockErr").style.display = "block";
-    document.getElementById("publish-btn").disabled = "true";
+    document.getElementById("publish-btn").disabled = true;
+  }else{
+    document.getElementById("stockErr").style.display = "none";
+    document.getElementById("publish-btn").disabled = false;
   }
 }

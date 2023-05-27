@@ -42,7 +42,7 @@ const generateInvoice = async (invoiceData, productDetails) => {
         .text(`${item.product.title} - ${item.quantity} - usd ${item.product.price}`);
     });
     doc.text("------------------------------");
-    doc.fontSize(16).text(`Total: Rs ${invoiceData?.total}`);
+    doc.fontSize(16).text(`Total: usd ${invoiceData?.total}`);
 
     // End the PDF document
     doc.end();
