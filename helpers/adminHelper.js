@@ -26,6 +26,32 @@ module.exports = {
       }
     });
   },
+  getReport: (startDate, endDate) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let orders=await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+          {
+            $match: {
+              status: "Delivered",
+              date: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate),
+              },
+            },
+          },
+          {
+            $sort: {
+              date: -1,
+            },
+          }
+        ]).toArray()
+        resolve(orders);
+      } catch (err) {
+        console.error(err);
+        reject(err);
+      }
+    });
+  },
 
   doSignup: (adminData) => {
     return new Promise(async (resolve, reject) => {

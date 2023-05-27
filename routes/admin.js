@@ -128,6 +128,6 @@ router.patch(
 
 router.get("/verify-coupon/:id", adminController.verifyCoupon);
 
-router.get('/sales-report', adminController.salesReport);
+router.get('/sales-report', adminController.viewReportByDate);
 router.get('/logout',middleware.verifyAdmin, adminController.logout)
 module.exports = router;

@@ -216,22 +216,15 @@ module.exports = {
       res.redirect("/admin/coupons");
     });
   },
-  salesReport : async(req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 5;
-    const skip = (page - 1) * pageSize;
-    let orders = await adminHelpers.getOrders(skip, pageSize);
-    const count = await adminHelpers.findOrderCount();
-    const totalPages = Math.ceil(count / pageSize);
-    const currentPage = page > totalPages ? totalPages : page;
-    res.render("admin/sales-report", {
-      orders,
-      totalPages,
-      currentPage,
-      pageSize,
-      result: 0,
-    });
-  },
+  viewReportByDate: async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const orders = await adminHelpers.getReport(startDate, endDate);
+      res.render("admin/sales-report", { orders });
+    } catch (err) {
+      console.error(err);
+    }
+  },
 
   logout: (req, res)=>{
     let err = ''
