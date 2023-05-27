@@ -31,13 +31,7 @@ module.exports = {
       value.wallet = wallet;
       if (response === null) {
         userHelpers.doSignup(value).then((response) => {
-          if (response) {
-            req.session.loggedIn = true;
-            req.session.user = response;
-            res.redirect("/");
-          } else {
-            res.redirect("/login");
-          }
+         res.redirect('/login')
         });
       } else {
         throw createError.BadRequest("Already a user");

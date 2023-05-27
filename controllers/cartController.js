@@ -3,12 +3,12 @@ const productHelpers = require("../helpers/productHelper");
 const adminHelpers = require("../helpers/adminHelper");
 const createHttpError = require("http-errors");
 const sendmail = require('../utils/nodeMailer');
-
 let cartCount = 0;
 
 module.exports = {
   checkout_get: async (req, res) => {
     try {
+      console.log('cart')
       let total = await userHelpers.getTotalAmount(req.session.user._id);
       if (total.length === 0) throw createHttpError.NotFound("Cart is empty");
       var address = await userHelpers.getAddress(req.session.user._id);

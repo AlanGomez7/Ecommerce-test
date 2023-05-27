@@ -3,6 +3,7 @@ const productHelpers = require("../helpers/productHelper");
 
 module.exports = {
   wishlist: async (req, res) => {
+    console.log(req.session.user)
     let cartCount;
     let isInStock = true;
     if (req.session.userLoggedIn) {
