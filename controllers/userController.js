@@ -9,6 +9,7 @@ const resetPasswordAuth = require("../utils/twilio");
 const adminHelper = require("../helpers/adminHelper");
 const productHelper = require("../helpers/productHelper");
 const sendMail  = require("../utils/nodeMailer");
+const pdfDownload = require("../utils/pdfKit");
 let cartCount = 0;
 
 module.exports = {
@@ -240,4 +241,16 @@ module.exports = {
       res.redirect("/orders");
     });
   },
+  downloadInvoice: async (req, res) => {
+    try {
+      const products = await adminHelpers.getOrderProducts(req.params.id);       
+      const order = await adminHelper.orderDetails(req.params.id);
+      pdfDownload.generateInvoice(order[0], products)
+      res.json({ status: true });
+    } catch (err) {
+      console.log(err);
+      res.json({ status: false });
+    }
+  },
+
 };

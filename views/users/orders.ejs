@@ -252,7 +252,7 @@
     <script src="js/main.js"></script>
     <script>
       function downloadReport(orderId) {
-        fetch("/admin/download-invoice/" + orderId, {
+        fetch("/download-invoice/" + orderId, {
           method: "GET",
         })
           .then((r) => r.json())

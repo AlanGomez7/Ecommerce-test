@@ -106,5 +106,8 @@ router.get(
   userController.returnOrder
 );
 
+router.get("/download-invoice/:id", userController.downloadInvoice);
+
+
 router.get("/search-item/", userController.search);
 module.exports = router;
